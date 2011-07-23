@@ -1,5 +1,6 @@
 // gsl.cpp - GNU Scientific Library routines
 // Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
+#pragma warning(disable: 4127)
 #include "gsl.h"
 
 using namespace xll;
@@ -87,3 +88,44 @@ static AddInX xai_gsl(
 */
 );	
 
+#ifdef _DEBUG
+
+int
+test_gsl(void)
+{
+	try {
+		fpx_complex z;
+		ensure (z.size() == 2);
+		ensure (z[0] == 0);
+		ensure (z[1] == 0);
+
+		fpx_complex z2(1);
+		ensure (z2.size() == 2);
+		ensure (z2[0] == 1);
+		ensure (z2[1] == 0);
+
+		gsl_complex w;
+		GSL_SET_COMPLEX(&w, 2, 3);
+		ensure (w.dat[0] == 2);
+		ensure (w.dat[1] == 3);
+
+		fpx_complex z3(w);
+		ensure (z3.size() == 2);
+		ensure (z3[0] == 2);
+		ensure (z3[1] == 3);
+
+		gsl_complex w2;
+		w2 = z3.gsl();
+		ensure (GSL_COMPLEX_EQ(w, w2));
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+
+		return 0;
+	}
+
+	return 1;
+}
+static Auto<OpenAfter> xao_gsl(test_gsl);
+
+#endif // _DEBUG

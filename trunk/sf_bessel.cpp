@@ -1,8 +1,7 @@
 // sf_bessel.cpp - Regular Cylindrical Bessel Functions
+// Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
 #include "gsl.h"
-extern "C" {
 #include "gsl/gsl_sf_bessel.h"
-}
 
 #ifndef CATEGORY
 #define CATEGORY _T("Special Functions")
@@ -10,13 +9,13 @@ extern "C" {
 
 using namespace xll;
 
-static AddIn xai_sf_bessel_J0(
-	Function(XLL_FP, "?xll_sf_bessel_J0", "SF.BESSEL.J0")
-	.Arg(XLL_FP, "Array", "is an array of numbers ")
-	.Category("GSL")
-	.FunctionHelp("Compute the regular cylindrical Bessel function of zeroth order.")
+static AddInX xai_sf_bessel_J0(
+	FunctionX(XLL_FPX, _T("?xll_sf_bessel_J0"), _T("SF.BESSEL.J0"))
+	.Arg(XLL_FPX, _T("Array"), _T("is an array of numbers "))
+	.Category(CATEGORY)
+	.FunctionHelp(_T("Compute the regular cylindrical Bessel function of zeroth order."))
 	.Documentation(
-		"This function is denoted <math>J<subscript>0</subscript>(x)</math>. "
+		_T("This function is denoted <math>J<subscript>0</subscript></math>(<math>x</math>). ")
 	)
 );
 xfp* WINAPI
@@ -29,3 +28,23 @@ xll_sf_bessel_J0(xfp* px)
 
 	return px;
 }
+
+#ifdef _DEBUG
+
+int
+test_bessel(void)
+{
+	try {
+		ensure (ExcelX(xlfEvaluate, StrX(_T("1=SF.BESSEL.J0(0)"))));
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+
+		return 0;
+	}
+
+	return 1;
+}
+static Auto<OpenAfter> xao_bessel(test_bessel);
+
+#endif // _DEBUG
