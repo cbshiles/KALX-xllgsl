@@ -17,6 +17,9 @@
   <ItemGroup>
     <ClInclude Include="gsl.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60D126D5-0379-4CBA-9255-2E0C40A66086}</ProjectGuid>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
