@@ -74,19 +74,19 @@ xll_poly_eval(const xfp* pa, const xfp* px)
 // gsl_poly_dd_eval
 // gsl_poly_dd_taylor
 
-static AddInX xai_complex_poly_solve(
-	FunctionX(XLL_FPX, _T("?xll_complex_poly_solve"), _T("COMPLEX.POLY.SOLVE"))
+static AddInX xai_poly_complex_solve(
+	FunctionX(XLL_FPX, _T("?xll_poly_complex_solve"), _T("POLY.COMPLEX.SOLVE"))
 	.Arg(XLL_FPX, _T("p"), IS_POLY)
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Compute all the roots of a the polynomial p."))
 	.Documentation(
 		_T("The implementation uses a balanced-QR reduction of the companion matrix. ")
-		_T("If <math>n</math> specifies the length of the coefficient array then <math>n - 1</math> are returned. ")
+		_T("If <math>n</math> specifies the length of the coefficient array then <math>n - </math>1 roots are returned. ")
 		_T("The coefficient of the highest order term must be non-zero. ")
 	)
 );
 xfp* WINAPI
-xll_complex_poly_solve(const xfp* pp)
+xll_poly_complex_solve(const xfp* pp)
 {
 #pragma XLLEXPORT
 	xword n = size(*pp);
