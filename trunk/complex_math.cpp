@@ -438,6 +438,27 @@ int
 test_complex_math(void)
 {
 	try {
+				fpx_complex z;
+		ensure (z[0] == 0);
+		ensure (z[1] == 0);
+
+		fpx_complex z2(1);
+		ensure (z2[0] == 1);
+		ensure (z2[1] == 0);
+
+		gsl_complex w;
+		GSL_SET_COMPLEX(&w, 2, 3);
+		ensure (w.dat[0] == 2);
+		ensure (w.dat[1] == 3);
+
+		fpx_complex z3(w);
+		ensure (z3[0] == 2);
+		ensure (z3[1] == 3);
+
+		gsl_complex w2;
+		w2 = z3.gsl();
+		ensure (GSL_COMPLEX_EQ(w, w2));
+
 		ensure (EVAL("{1, 0} = COMPLEX.POLAR(1, 0)"));
 //		ensure (EVAL("{-1, 0} = COMPLEX.POLAR(1, PI())"); // fails!
 		ensure (EVAL("{4,6} = COMPLEX.ADD({1,2},{3,4})"));

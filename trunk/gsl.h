@@ -22,55 +22,68 @@ typedef xll::traits<XLOPERX>::xword xword;
 // GSL specific helper class
 namespace xll {
 	template<class X>
-	struct xfp_complex : public XFP<X> {
+	struct xfp_complex {
+		xword rows;
+		xword columns;
+		double array[2];
 		xfp_complex(double x = 0, double y = 0)
+			: rows(1), columns(2)
 		{
-			reshape(1, 2);
-
-			operator[](0) = x;
-			operator[](1) = y;
+			array[0] = x;
+			array[1] = y;
 		}
 		xfp_complex(typename const xll::traits<X>::xfp& z)
+			: rows(1), columns(2)
 		{
-			ensure (xll::size(z) == 2);
-			reshape(1, 2);
-
-			operator[](0) = z.array[0];
-			operator[](1) = z.array[1];
+			array[0] = z.array[0];
+			array[1] = z.array[1];
 		}
 		xfp_complex(const gsl_complex& z)
+			: rows(1), columns(2)
 		{
-			reshape(1, 2);
-
-			operator[](0) = z.dat[0];
-			operator[](1) = z.dat[1];
+			array[0] = z.dat[0];
+			array[1] = z.dat[1];
 		}
 		xfp_complex& operator=(double x)
 		{
-			reshape(1, 2);
+			rows = 1;
+			columns = 2;
 
-			operator[](0) = x;
-			operator[](1) = 0;
+			array[0] = x;
+			array[1] = 0;
 
 			return *this;
 		}
 		xfp_complex& operator=(const gsl_complex& z)
 		{
-			reshape(1, 2);
+			rows = 1;
+			columns = 2;
 
-			operator[](0) = z.dat[0];
-			operator[](1) = z.dat[1];
+			array[0] = z.dat[0];
+			array[1] = z.dat[1];
 
 			return *this;
+		}
+		xfp* operator&()
+		{
+			return reinterpret_cast<xfp*>(this);
 		}
 		gsl_complex gsl() const
 		{
 			gsl_complex z;
 
-			z.dat[0] = operator[](0);
-			z.dat[1] = operator[](1);
+			z.dat[0] = array[0];
+			z.dat[1] = array[1];
 
 			return z;
+		}
+		double operator[](xword i) const
+		{
+			return array[i];
+		}
+		double &operator[](xword i)
+		{
+			return array[i];
 		}
 	};
 	typedef xfp_complex<XLOPER>   fp_complex;

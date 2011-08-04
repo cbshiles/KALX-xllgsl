@@ -68,3 +68,9 @@ SF_UNARY(sf_airy_Bi, "SF.AIRY.Bi",
 	  )
 	._(para(_T("It is also a solution of the second order, non-linear differential equation <math>y") ENT_Prime _T(" + xy = ") _R("0") _T("</math>. "))) 
 )
+/*
+SF_UNARY(sf_bessel_J0, "SF.BESSEL.J0",
+	"Compute the regular cylindrical Bessel function of zeroth order.",
+	"This function is denoted <math>J<subscript>0</subscript></math>(<math>x</math>). "
+)
+*/
