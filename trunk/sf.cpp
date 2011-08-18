@@ -35,7 +35,7 @@ sf_unary(int (*f)(double,gsl_mode_t,gsl_sf_result*), double x, gsl_mode_t mode)
 		return 0;
 	}
 
-	return &y;
+	return y.get();
 }
 
 // create the add-in object

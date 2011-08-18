@@ -114,5 +114,5 @@ xll_poly_complex_solve(const xfp* pp)
 	}
 
 
-	return &r;
+	return r.get();
 }
