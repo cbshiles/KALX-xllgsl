@@ -5,6 +5,8 @@
 
 using namespace xll;
 
+typedef handle<gsl_sum_levin_u_workspace, void (*)(gsl_sum_levin_u_workspace*)> handle_sum_levin;
+
 static AddInX xai_gsl_sum_levin(
 	FunctionX(XLL_HANDLEX XLL_UNCALCEDX, _T("?xll_gsl_sum_levin"), PREFIX _T("SUM.LEVIN"))
 	.Arg(XLL_LONGX, _T("Size"), _T("is the size of the series to be accelerated. "))
@@ -16,14 +18,14 @@ xll_gsl_sum_levin(LONG n)
 {
 #pragma XLLEXPORT
 
-	handle<gsl_sum_levin_u_workspace, void (*)(gsl_sum_levin_u_workspace*)> h(gsl_sum_levin_u_alloc(n), gsl_sum_levin_u_free);
+	handle_sum_levin h(gsl_sum_levin_u_alloc(n), gsl_sum_levin_u_free);
 
 	return h.get();
 }
 
 static AddInX xai_sum_levin_accel(
 	FunctionX(XLL_FPX, _T("?xll_gsl_sum_levin_accel"), PREFIX _T("SUM.LEVIN.ACCEL"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle returned by ") PREFIX _T("SUM.LEVIN"))
+	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle returned by ") PREFIX _T("SUM.LEVIN."))
 	.Arg(XLL_FPX, _T("Series"), _T("is a series to accelerate. "))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Returns the estimate of the convergent term and it's error estimate."))
@@ -35,9 +37,9 @@ xll_gsl_sum_levin_accel(HANDLEX hx, xfp* px)
 	static FPX result(2, 1);
 
 	try {
-		handle<gsl_sum_levin_u_workspace, void (*)(gsl_sum_levin_u_workspace*)> h(hx);
+		handle_sum_levin h(hx);
 
-		gsl_sum_levin_u_accel(px->array, size(*px), &*h, result.array(), result.array() + 1);
+		gsl_sum_levin_u_accel(px->array, size(*px), &*h, &result[0], &result[1]);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
