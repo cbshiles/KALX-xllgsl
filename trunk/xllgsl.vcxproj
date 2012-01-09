@@ -16,6 +16,7 @@
     <ClCompile Include="poly.cpp" />
     <ClCompile Include="sf.cpp" />
     <ClCompile Include="sf_bessel.cpp" />
+    <ClCompile Include="sum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gsl.h" />

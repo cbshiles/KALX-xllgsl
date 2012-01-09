@@ -7,6 +7,7 @@
 #include "xll/xll.h"
 
 #define CATEGORY _T("GSL")
+#define PREFIX _T("GSL.")
 
 #define IS_NUM _T("is a number")
 #define IS_PREC _T("is the precision from the PREC_* enumeration")
