@@ -18,24 +18,7 @@ static AddInX xai_poly_eval(
 	.Arg(XLL_FPX, _T("x"), _T("is the number at which to evaluate the polynomial "))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Evaluate the polynomial p(x)."))
-	.Documentation(element()
-		._(para()
-			._(_T("If <codeInline>p</codeInline> is the array <math>a</math> this function calculates "))
-			._(math(
-				_T("p(x) = a<subscript>0</subscript> + a<subscript>1</subscript> x + ")
-				ENT_middot ENT_middot ENT_middot
-				_T(" + a<subscript>n</subscript> x<superscript>n</superscript>")
-			  )
-			._(_T(".")))
-		  )
-		._(para()
-			._(_T("The polynomial coefficients are assumed to be complex numbers if <codeInline>p</codeInline> "))
-			._(_T("has two columns and more than one row. In this case <codeInline>gsl_complex_poly_complex_eval</codeInline> "))
-			._(_T("is called. Otherwise, <codeInline>gsl_poly_complex_eval</codeInline> is called if "))
-			._(_T("<codeInline>x</codeInline> is an array of two numbers and "))
-			._(_T("<codeInline>gsl_poly_eval</codeInline> is called if <codeInline>x</codeInline> is a single number. "))
-		  )
-
+	.Documentation(_T("")
 	)
 );
 xfp* WINAPI

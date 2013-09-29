@@ -48,25 +48,25 @@ sf_unary(int (*f)(double,gsl_mode_t,gsl_sf_result*), double x, gsl_mode_t mode)
 SF_UNARY(sf_airy_Ai, "SF.AIRY.Ai",
 	"This routine computes the Airy function Ai(x) with an accuracy specified by mode. ",
 	element()
-	._(para(_T("The Airy function Ai(<math>x</math>) is defined by the integral representation:")))
-	._(quote(math()
-		._(_R("Ai(") _T("x") _R(") = ") ENT_int)
-		._(sub(_T("0")))._(sup(ENT_infin))._(_R("cos(") _T("t"))._(sup(_T("3")))._(_R("/3") _T(" + xt") _R(")") _T(" dt/" ENT_pi)))
+	.content(para(_T("The Airy function Ai(<math>x</math>) is defined by the integral representation:")))
+	.content(quote(math()
+		.content(_R("Ai(") _T("x") _R(") = ") ENT_int)
+		.content(sub(_T("0"))).content(sup(ENT_infin)).content(_R("cos(") _T("t")).content(sup(_T("3"))).content(_R("/3") _T(" + xt") _R(")") _T(" dt/" ENT_pi)))
 		)
-	._(para(_T("It is a solution of the second order, non-linear differential equation <math>y") ENT_Prime _T(" + xy = ") _R("0") _T("</math>. "))) 
+	.content(para(_T("It is a solution of the second order, non-linear differential equation <math>y") ENT_Prime _T(" + xy = ") _R("0") _T("</math>. "))) 
 )
 SF_UNARY(sf_airy_Bi, "SF.AIRY.Bi",
 	"This routine computes the Airy function Bi(x) with an accuracy specified by mode. ",
 	element()
-	._(para(_T("The Airy function of the second kind, Bi(<math>x</math>), is defined by the integral representation:")))
-	._(quote(math()
-		._(_R("Bi(") _T("x") _R(") = ") ENT_int)
-		._(sub(_T("0")))._(sup(ENT_infin))._(
-			_R("[exp(") _T("-t"))._(sup(_T("3")))._(_R("/3") _T(" + xt") _R(")") 
+	.content(para(_T("The Airy function of the second kind, Bi(<math>x</math>), is defined by the integral representation:")))
+	.content(quote(math()
+		.content(_R("Bi(") _T("x") _R(") = ") ENT_int)
+		.content(sub(_T("0"))).content(sup(ENT_infin)).content(
+			_R("[exp(") _T("-t")).content(sup(_T("3"))).content(_R("/3") _T(" + xt") _R(")") 
 			_T(" + ") 
-			_R("sin(") _T("t"))._(sup(_T("3")))._(_R("/3") _T(" + xt") _R(")]") _T(" dt/" ENT_pi)))
+			_R("sin(") _T("t")).content(sup(_T("3"))).content(_R("/3") _T(" + xt") _R(")]") _T(" dt/" ENT_pi)))
 	  )
-	._(para(_T("It is also a solution of the second order, non-linear differential equation <math>y") ENT_Prime _T(" + xy = ") _R("0") _T("</math>. "))) 
+	.content(para(_T("It is also a solution of the second order, non-linear differential equation <math>y") ENT_Prime _T(" + xy = ") _R("0") _T("</math>. "))) 
 )
 /*
 SF_UNARY(sf_bessel_J0, "SF.BESSEL.J0",

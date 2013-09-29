@@ -32,6 +32,9 @@
     <ClCompile Include="sum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="quadratic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gsl.h">

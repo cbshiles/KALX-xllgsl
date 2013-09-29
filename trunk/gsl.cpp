@@ -1,10 +1,22 @@
 // gsl.cpp - GNU Scientific Library routines
 // Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
 #pragma warning(disable: 4127)
+#include "gsl/gsl_errno.h"
 #include "gsl.h"
 
 using namespace xll;
+/*
+// don't print to stdout and call abort
+int xll_set_error_handler_off(void)
+{
+	gsl_set_error_handler_off();
 
+	return 1;
+}
+*/
+//static Auto<Open> xao_set_error_handler_off(xll_set_error_handler_off);
+/*
+#ifdef _DEBUG
 static AddInX xai_gsl(
 	ArgsX(CATEGORY)
 	.Documentation(xml::Conceptual(_T("Call the GNU Scientific Library from Excel."))
@@ -52,7 +64,7 @@ static AddInX xai_gsl(
 			)
 		)
 	)
-/*
+
  
  
  Permutations  Combinations 
@@ -85,5 +97,6 @@ static AddInX xai_gsl(
  
  Basis Splines  Wavelets 
  
-*/
 );	
+#endif // _DEBUG
+*/
