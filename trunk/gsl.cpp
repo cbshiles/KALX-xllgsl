@@ -1,20 +1,32 @@
 // gsl.cpp - GNU Scientific Library routines
 // Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
 #pragma warning(disable: 4127)
+#include <stdio.h>
 #include "gsl/gsl_errno.h"
 #include "gsl.h"
 
 using namespace xll;
-/*
-// don't print to stdout and call abort
-int xll_set_error_handler_off(void)
+
+void xll_error_handler (const char * reason, 
+              const char * file, 
+              int line, 
+              int gsl_errno)
 {
-	gsl_set_error_handler_off();
+	xchar buf[255];
+
+	_stprintf_s(buf, 255, "GSL error (%d) reason: \"%s\"\nfile: %s line: %d", gsl_errno, reason, file, line);
+
+	XLL_ERROR(buf);
+}
+
+int xll_set_error_handler(void)
+{
+	gsl_set_error_handler(xll_error_handler);
 
 	return 1;
 }
-*/
-//static Auto<Open> xao_set_error_handler_off(xll_set_error_handler_off);
+
+static Auto<Open> xao_set_error_handler(xll_set_error_handler);
 /*
 #ifdef _DEBUG
 static AddInX xai_gsl(

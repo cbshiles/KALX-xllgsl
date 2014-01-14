@@ -57,6 +57,24 @@ xll_poly_eval(const xfp* pa, const xfp* px)
 // gsl_poly_dd_eval
 // gsl_poly_dd_taylor
 
+class gsl_poly_complex {
+	gsl_poly_complex_workspace* pw;
+public:
+	gsl_poly_complex(int n)
+		: pw(gsl_poly_complex_workspace_alloc(n))
+	{
+		ensure (pw);
+	}
+	~gsl_poly_complex()
+	{
+		gsl_poly_complex_workspace_free(pw);
+	}
+	int solve(const double* a, int n, double* r)
+	{
+		return gsl_poly_complex_solve(a, n, pw, r);
+	}
+};
+
 static AddInX xai_poly_complex_solve(
 	FunctionX(XLL_FPX, _T("?xll_poly_complex_solve"), _T("POLY.COMPLEX.SOLVE"))
 	.Arg(XLL_FPX, _T("p"), IS_POLY)
@@ -72,30 +90,21 @@ xfp* WINAPI
 xll_poly_complex_solve(const xfp* pp)
 {
 #pragma XLLEXPORT
-	xword n = size(*pp);
-	static FPX r(n - 1, 2);
+	static FPX r;
 
-	if (pp->array[n -1] == 0) {
-		XLL_ERROR("COMPLEX.POLY.SOLVE: the coefficient of the highest order term must be non-zero");
+	try {
+		xword n = size(*pp);
+		r.resize(n - 1, 2);
+
+		gsl_poly_complex pc(n);
+
+		ensure (0 == pc.solve(pp->array, n, r.array()));
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
 
 		return 0;
 	}
-
-	gsl_poly_complex_workspace* pw;
-	if (0 == (pw = gsl_poly_complex_workspace_alloc(n))) {
-		XLL_ERROR("COMPLEX.POLY.SOLVE: gsl_poly_complex_workspace_alloc failed");
-
-		return 0;
-	}
-	int result = gsl_poly_complex_solve(pp->array, n, pw, r.array());
-	gsl_poly_complex_workspace_free(pw);
-
-	if (0 != result) {
-		XLL_ERROR("COMPLEX.POLY.SOLVE: gsl_poly_complex_solve failed");
-
-		return 0;
-	}
-
 
 	return r.get();
 }

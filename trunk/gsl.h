@@ -7,7 +7,7 @@
 #include "xll/xll.h"
 
 #define CATEGORY _T("GSL")
-#define PREFIX _T("GSL.")
+#define PREFIX CATEGORY _T(".")
 
 #define IS_NUM _T("is a number")
 #define IS_PREC _T("is the precision from the PREC_* enumeration")
@@ -19,6 +19,7 @@
 
 typedef xll::traits<XLOPERX>::xfp xfp;
 typedef xll::traits<XLOPERX>::xword xword;
+typedef xll::traits<XLOPERX>::xchar xchar;
 
 // GSL specific helper class
 namespace xll {
@@ -91,4 +92,3 @@ namespace xll {
 	typedef xfp_complex<XLOPER12> fp12_complex;
 	typedef xfp_complex<XLOPERX>  fpx_complex;
 }
-
