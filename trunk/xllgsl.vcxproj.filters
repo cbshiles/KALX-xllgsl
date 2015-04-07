@@ -14,32 +14,26 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sf_bessel.cpp">
+    <ClCompile Include="xll_complex_math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gsl.cpp">
+    <ClCompile Include="xll_poly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="complex_math.cpp">
+    <ClCompile Include="xll_sf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="poly.cpp">
+    <ClCompile Include="xll_sf_bessel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sf.cpp">
+    <ClCompile Include="xll_sum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sum.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="quadratic.cpp">
+    <ClCompile Include="xll_gsl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gsl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\gsl\gsl_blas.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -690,6 +684,9 @@
     </ClInclude>
     <ClInclude Include="include\gsl\gsl_wavelet2d.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_gsl.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
