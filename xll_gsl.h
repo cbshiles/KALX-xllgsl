@@ -3,6 +3,7 @@
 // Uncomment for Excel 2007 and above.
 //#define EXCEL12
 #pragma once
+#include "gsl/gsl_errno.h"
 #include "gsl/gsl_complex.h"
 #include "../xll8/xll/xll.h"
 
@@ -10,13 +11,24 @@
 #define PREFIX CATEGORY _T(".")
 
 #define IS_NUM _T("is a number")
-#define IS_PREC _T("is the precision from the PREC_* enumeration")
+#define IS_PREC _T("is the precision from the GSL_PREC_* enumeration")
 #define IS_COMPLEX _T("is a two element array of the real and imaginary parts of a complex number")
-#define IS_REAL_OR_COMPLEX _T("is a number of a two element array of the real and imaginary parts of a complex number")
+#define IS_REAL_OR_COMPLEX _T("is a number or a two element array of the real and imaginary parts of a complex number")
 
 typedef xll::traits<XLOPERX>::xfp xfp;
 typedef xll::traits<XLOPERX>::xword xword;
 typedef xll::traits<XLOPERX>::xchar xchar;
+
+inline char* gsl_message(int status)
+{
+	switch (status) {
+	case GSL_SUCCESS:
+		return "";
+		//!!! more cases
+	default:
+		return "GSL error";
+	}
+}
 
 namespace xll {
 // GSL specific helper class

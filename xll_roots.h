@@ -35,7 +35,7 @@ namespace gsl {
 	class root_fsolver {
 		gsl_root_fsolver* p;
 		gsl_function _f;
-		std::function<double(double)> f;
+		std::function<double(double)> f_;
 		static double function(double x, void* v)
 		{
 			const std::function<double(double)>& f = *reinterpret_cast<const std::function<double(double)>*>(v);
@@ -61,9 +61,9 @@ namespace gsl {
 		}
 		int set(const std::function<double(double)>& f, double lo, double up)
 		{
-			this->f = f;
+			f_ = f;
 
-			_f.params = &this->f;
+			_f.params = &f_;
 
 			return gsl_root_fsolver_set(p, &_f, lo, up);
 		}

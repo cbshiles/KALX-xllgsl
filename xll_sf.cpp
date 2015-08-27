@@ -8,11 +8,11 @@
 
 using namespace xll;
 
-XLL_ENUM_DOCX(GSL_PREC_DOUBLE, PREC_DOUBLE, CATEGORY, _T("Double precision"),
+XLL_ENUM_DOCX(GSL_PREC_DOUBLE, GSL_PREC_DOUBLE, CATEGORY, _T("Double precision"),
 	_T("Double-precision has a relative accuracy of approximately <math>2 ") _T(ENT_times) _T(" 10<superscript>-16</superscript></math>."))
-XLL_ENUM_DOCX(GSL_PREC_SINGLE, PREC_SINGLE, CATEGORY, _T("Single precision"),
+XLL_ENUM_DOCX(GSL_PREC_SINGLE, GSL_PREC_SINGLE, CATEGORY, _T("Single precision"),
 	_T("Single-precision has a relative accuracy of approximately <math>10<superscript>-7</superscript></math>.")) 
-XLL_ENUM_DOCX(GSL_PREC_APPROX, PREC_APPROX, CATEGORY, _T("Approximate values"),
+XLL_ENUM_DOCX(GSL_PREC_APPROX, GSL_PREC_APPROX, CATEGORY, _T("Approximate values"),
 	_T("Approximate values has a relative accuracy of approximately <math>5 ") _T(ENT_times) _T(" 10<superscript>-4</superscript></math>.")) 
 
 // create the add-in object
@@ -23,6 +23,7 @@ XLL_ENUM_DOCX(GSL_PREC_APPROX, PREC_APPROX, CATEGORY, _T("Approximate values"),
 	extern "C" __declspec(dllexport) xfp* xll_ ## f(double x, gsl_mode_t mode) { \
 	return sf_unary_mode(gsl_ ## f ## _e, x, mode ? mode : GSL_PREC_DOUBLE); }
 
+#if 0
 SF_UNARY_MODE(sf_airy_Ai, "SF.AIRY.Ai",
 	"This routine computes the Airy function Ai(x) with an accuracy specified by mode. ",
 	"The Airy function Ai(<math>x</math>) is defined by the integral representation:"
@@ -53,3 +54,4 @@ SF_UNARY(sf_bessel_J0, "SF.BESSEL.J0",
 	"Compute the regular cylindrical Bessel function of zeroth order.",
 	"This function is denoted <math>J<subscript>0</subscript></math>(<math>x</math>). "
 )
+#endif // 0

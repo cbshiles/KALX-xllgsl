@@ -12,6 +12,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{9e7a13d0-30eb-475e-b21d-50925b59e5fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="specfun">
+      <UniqueIdentifier>{e2bfd3a3-1717-4c01-a848-6b7c49d9b484}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll_complex_math.cpp">
@@ -29,11 +32,11 @@
     <ClCompile Include="xll_gsl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll_roots.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll_rng.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_airy.cpp">
+      <Filter>specfun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
