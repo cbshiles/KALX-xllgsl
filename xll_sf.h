@@ -2,8 +2,6 @@
 #include "gsl/gsl_sf.h"
 #include "xll_gsl.h"
 
-typedef xll::traits<XLOPERX>::xfp xfp;
-
 // create the add-in object
 #define SF_UNARY(f, F, FH, D) static AddIn xai_ ## f(Function(XLL_FP, ENSURE_STRZ_(xll_ ## f), F) \
 	.Arg(XLL_DOUBLE, "x", "is a number") \
@@ -20,7 +18,7 @@ typedef xll::traits<XLOPERX>::xfp xfp;
 
 namespace xll {
 
-	inline xfp*	sf_unary(int (*f)(double,gsl_sf_result*), double x)
+	inline xfpx*	sf_unary(int (*f)(double,gsl_sf_result*), double x)
 	{
 		static FPX y(1, 2);
 		gsl_sf_result r;
@@ -39,7 +37,7 @@ namespace xll {
 		return y.get();
 	}
 
-	inline xfp*	sf_unary_mode(int (*f)(double,gsl_mode_t,gsl_sf_result*), double x, gsl_mode_t mode)
+	inline xfpx*	sf_unary_mode(int (*f)(double,gsl_mode_t,gsl_sf_result*), double x, gsl_mode_t mode)
 	{
 		static FPX y(1, 2);
 		gsl_sf_result r;

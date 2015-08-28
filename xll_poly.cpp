@@ -24,7 +24,7 @@ static AddIn xai_poly_solve_quadratic(
 		"The number of roots found depends on the sign of the discriminant b^2 - 4 a c. This will be subject to rounding and cancellation errors when computed in double precision, and will also be subject to errors if the coefficients of the polynomial are inexact. These errors may cause a discrete change in the number of roots. However, for polynomials with small integer coefficients the discriminant can always be computed exactly. "
 	)
 );
-xfp* WINAPI xll_poly_solve_quadratic(double a, double b, double c)
+xfpx* WINAPI xll_poly_solve_quadratic(double a, double b, double c)
 {
 #pragma XLLEXPORT
 	static FPX x(1,2);
@@ -46,7 +46,7 @@ static AddInX xai_poly_eval(
 	.Documentation(_T("")
 	)
 );
-xfp* WINAPI
+xfpx* WINAPI
 xll_poly_eval(const xfp* pa, const xfp* px)
 {
 #pragma XLLEXPORT
@@ -111,7 +111,7 @@ static AddInX xai_poly_complex_solve(
 		_T("The coefficient of the highest order term must be non-zero. ")
 	)
 );
-xfp* WINAPI
+xfpx* WINAPI
 xll_poly_complex_solve(const xfp* pp)
 {
 #pragma XLLEXPORT

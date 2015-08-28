@@ -1,4 +1,4 @@
-// sf_bessel.cpp - Regular Cylindrical Bessel Functions
+// xll_complex_math.cpp - Regular Cylindrical Bessel Functions
 // Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
 #pragma warning(disable: 4127)
 #include "gsl/gsl_complex_math.h"
@@ -26,7 +26,7 @@ static AddInX xai_complex_polar(
 		_T("<codeInline>COMPLEX.POLAR(1, PI())</codeInline> is not equal to -1! ")
 	)
 );
-xfp* WINAPI
+xfpx* WINAPI
 xll_complex_polar(double r, double theta)
 {
 #pragma XLLEXPORT
@@ -46,7 +46,7 @@ static AddInX xai_complex_rect(
 	.Documentation(
 	)
 );
-xfp* WINAPI
+xfpx* WINAPI
 xll_complex_rect(double x, double y)
 {
 #pragma XLLEXPORT
@@ -67,7 +67,7 @@ static AddInX xai_complex_arg(
 	)
 );
 double WINAPI
-xll_complex_arg(const xfp* pz)
+xll_complex_arg(const xfpx* pz)
 {
 #pragma XLLEXPORT
 	if (size(*pz) != 2) {
@@ -86,7 +86,7 @@ static AddInX xai_complex_abs(
 	)
 );
 double WINAPI
-xll_complex_abs(xfp* pz)
+xll_complex_abs(xfpx* pz)
 {
 #pragma XLLEXPORT
 	if (size(*pz) != 2) {
@@ -105,7 +105,7 @@ static AddInX xai_complex_abs2(
 	)
 );
 double WINAPI
-xll_complex_abs2(xfp* pz)
+xll_complex_abs2(xfpx* pz)
 {
 #pragma XLLEXPORT
 	if (size(*pz) != 2) {
@@ -124,7 +124,7 @@ static AddInX xai_complex_logabs(
 	)
 );
 double WINAPI
-xll_complex_logabs(xfp* pz)
+xll_complex_logabs(xfpx* pz)
 {
 #pragma XLLEXPORT
 	if (size(*pz) != 2) {
@@ -143,8 +143,8 @@ static AddInX xai_complex_add(
 	.FunctionHelp(_T("Return the complex sum of x and y."))
 	.Documentation(_T("<math>x + y</math>"))
 );
-xfp* WINAPI
-xll_complex_add(xfp* px, xfp* py)
+xfpx* WINAPI
+xll_complex_add(xfpx* px, xfpx* py)
 {
 #pragma XLLEXPORT
 	static fpx_complex z;
@@ -171,8 +171,8 @@ static AddInX xai_complex_sub(
 	.FunctionHelp(_T("Return the complex difference of x and y."))
 	.Documentation(_T("<math>x - y</math>"))
 );
-xfp* WINAPI
-xll_complex_sub(xfp* px, xfp* py)
+xfpx* WINAPI
+xll_complex_sub(xfpx* px, xfpx* py)
 {
 #pragma XLLEXPORT
 	static fpx_complex z;
@@ -199,8 +199,8 @@ static AddInX xai_complex_mul(
 	.FunctionHelp(_T("Return the complex product of x and y."))
 	.Documentation(_T("<math>x ") _T(ENT_times) _T(" y</math>"))
 );
-xfp* WINAPI
-xll_complex_mul(xfp* px, xfp* py)
+xfpx* WINAPI
+xll_complex_mul(xfpx* px, xfpx* py)
 {
 #pragma XLLEXPORT
 	static fpx_complex z;
@@ -227,8 +227,8 @@ static AddInX xai_complex_div(
 	.FunctionHelp(_T("Return the complex quotient of x and y."))
 	.Documentation(_T("<math>x / y</math>"))
 );
-xfp* WINAPI
-xll_complex_div(xfp* px, xfp* py)
+xfpx* WINAPI
+xll_complex_div(xfpx* px, xfpx* py)
 {
 #pragma XLLEXPORT
 	static fpx_complex z;
@@ -256,8 +256,8 @@ static AddInX xai_complex_pow(
 	.FunctionHelp(_T("Return the complex power of x to the y."))
 	.Documentation(_T("<math>x<superscript>y</superscript></math>"))
 );
-xfp* WINAPI
-xll_complex_pow(xfp* px, xfp* py)
+xfpx* WINAPI
+xll_complex_pow(xfpx* px, xfpx* py)
 {
 #pragma XLLEXPORT
 	static fpx_complex z;
@@ -307,7 +307,7 @@ static AddInX xai_complex_congjugate(
 	.Documentation(_T("The conjugate of <math>x + i y</math> is <math>x - iy</math>." ))
 );
 extern "C" __declspec(dllexport) 
-xfp* xll_complex_conjugate(xfp* pz)
+xfpx* xll_complex_conjugate(xfpx* pz)
 {
 	if (size(*pz) != 2) {
 		XLL_ERROR("COMPLEX.CONJUGATE" ARG_ERR);
@@ -321,7 +321,7 @@ xfp* xll_complex_conjugate(xfp* pz)
 }
 #define COMPLEX_UNARY(f, F, FH, D) static AddInX xai_ ## f(FunctionX(XLL_FPX, _T(ENSURE_STRZ_(xll_ ## f)), _T(F)) \
 	.Arg(XLL_FPX, _T("Arg"), IS_COMPLEX).Category(CATEGORY).FunctionHelp(_T(FH)).Documentation(_T(D))); \
-	extern "C" __declspec(dllexport) xfp* xll_ ## f(xfp* pz) { \
+	extern "C" __declspec(dllexport) xfpx* xll_ ## f(xfpx* pz) { \
 	if (size(*pz) != 2) { XLL_ERROR(F ARG_ERR); return 0; } \
 	return complex_unary<XLOPERX>(gsl_ ## f, pz); }
 

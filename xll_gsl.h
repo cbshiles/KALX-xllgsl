@@ -15,19 +15,51 @@
 #define IS_COMPLEX _T("is a two element array of the real and imaginary parts of a complex number")
 #define IS_REAL_OR_COMPLEX _T("is a number or a two element array of the real and imaginary parts of a complex number")
 
-typedef xll::traits<XLOPERX>::xfp xfp;
 typedef xll::traits<XLOPERX>::xword xword;
 typedef xll::traits<XLOPERX>::xchar xchar;
 
+// convert error status to string from gsl_errno.h
 inline char* gsl_message(int status)
 {
 	switch (status) {
-	case GSL_SUCCESS:
-		return "";
-		//!!! more cases
-	default:
-		return "GSL error";
+		case GSL_SUCCESS: return "";
+		case GSL_FAILURE: return "failure";
+		case GSL_CONTINUE: return "iteration has not converged";
+		case GSL_EDOM: return "input domain error, e.g sqrt(-1)";
+		case GSL_ERANGE: return "output range error, e.g. exp(1e100)";
+		case GSL_EFAULT: return "invalid pointer";
+		case GSL_EINVAL: return "invalid argument supplied by user";
+		case GSL_EFAILED: return "generic failure";
+		case GSL_EFACTOR: return "factorization failed";
+		case GSL_ESANITY: return "sanity check failed - shouldn't happen";
+		case GSL_ENOMEM: return "malloc failed";
+		case GSL_EBADFUNC: return "problem with user-supplied function";
+		case GSL_ERUNAWAY: return "iterative process is out of control";
+		case GSL_EMAXITER: return "exceeded max number of iterations";
+		case GSL_EZERODIV: return "tried to divide by zero";
+		case GSL_EBADTOL: return "user specified an invalid tolerance";
+		case GSL_ETOL: return "failed to reach the specified tolerance";
+		case GSL_EUNDRFLW: return "underflow";
+		case GSL_EOVRFLW: return "overflow";
+		case GSL_ELOSS: return "loss of accuracy";
+		case GSL_EROUND: return "failed because of roundoff error";
+		case GSL_EBADLEN: return "matrix, vector lengths are not conformant";
+		case GSL_ENOTSQR: return "matrix not square";
+		case GSL_ESING: return "apparent singularity detected";
+		case GSL_EDIVERGE: return "integral or series is divergent";
+		case GSL_EUNSUP: return "requested feature is not supported by the hardware";
+		case GSL_EUNIMPL: return "requested feature not (yet) implemented";
+		case GSL_ECACHE: return "cache limit exceeded";
+		case GSL_ETABLE: return "table limit exceeded";
+		case GSL_ENOPROG: return "iteration is not making progress towards solution";
+		case GSL_ENOPROGJ: return "jacobian evaluations are not improving the solution";
+		case GSL_ETOLF: return "cannot reach the specified tolerance in F";
+		case GSL_ETOLX: return "cannot reach the specified tolerance in X";
+		case GSL_ETOLG: return "cannot reach the specified tolerance in gradient";
+		case GSL_EOF: return "end of file";
 	}
+
+	return "unknown error";
 }
 
 namespace xll {
@@ -75,9 +107,9 @@ namespace xll {
 
 			return *this;
 		}
-		xfp* operator&()
+		xfpx* operator&()
 		{
-			return reinterpret_cast<xfp*>(this);
+			return reinterpret_cast<xfpx*>(this);
 		}
 		gsl_complex gsl() const
 		{
