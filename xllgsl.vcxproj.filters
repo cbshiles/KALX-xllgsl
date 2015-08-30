@@ -38,6 +38,12 @@
     <ClCompile Include="specfun\xll_sf_airy.cpp">
       <Filter>specfun</Filter>
     </ClCompile>
+    <ClCompile Include="xll_roots.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_bessel.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">

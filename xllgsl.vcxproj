@@ -12,12 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="specfun\xll_sf_airy.cpp" />
+    <ClCompile Include="specfun\xll_sf_bessel.cpp" />
     <ClCompile Include="xll_complex_math.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="xll_gsl.cpp" />
     <ClCompile Include="xll_poly.cpp" />
     <ClCompile Include="xll_rng.cpp" />
+    <ClCompile Include="xll_roots.cpp" />
     <ClCompile Include="xll_sf.cpp" />
     <ClCompile Include="xll_sum.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

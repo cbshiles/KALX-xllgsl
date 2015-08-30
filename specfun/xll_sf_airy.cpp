@@ -35,7 +35,7 @@ double WINAPI xll_sf_airy(double x, WORD prec)
 	try {
 		auto status = gsl_sf_airy_Ai_e(x, prec, &result);
 		if (status != GSL_SUCCESS)
-			throw std::runtime_error(gsl_message(status));
+			throw std::runtime_error(gsl_strerror(status));
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());

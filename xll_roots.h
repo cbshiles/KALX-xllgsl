@@ -1,99 +1,34 @@
-// xll_roots.h
+// xll_roots.h - GSL 1-dim root finding
 #pragma once
-#include <functional>
+#include <memory>
+#include <stdexcept>
 #include "gsl/gsl_roots.h"
 
 namespace gsl {
-/*
-	struct function_base {
-		virtual double operator()(double) const = 0;
-		virtual ~function_base() = 0;
-	};
-	class function_lambda : public function_base {
-		std::function<double(double)> f;
-	public:
-		function_lambda(const std::function<double(double)>& f)
-			: f(f)
-		{ }
-		function_lambda(const function_lambda&) = default;
-		function_lambda& operator=(const function_lambda&) = default;
-		~function_lambda()
-		{ }
-		double operator()(double x) const override
-		{
-			return f(x);
-		}
-	};
 
-	inline double function(double x, void* v)
+	inline auto root_fsolver(const gsl_root_fsolver_type * type)
 	{
-		const function_base& f = *reinterpret_cast<const function_base*>(v);
-
-		return  f(x);
-	}
-*/
-	class root_fsolver {
-		gsl_root_fsolver* p;
-		gsl_function _f;
-		std::function<double(double)> f_;
-		static double function(double x, void* v)
-		{
-			const std::function<double(double)>& f = *reinterpret_cast<const std::function<double(double)>*>(v);
-
-			return f(x);
-		}
-	public:
-		root_fsolver(const gsl_root_fsolver_type * type)
-			: p(gsl_root_fsolver_alloc(type))
-		{
-			_f.function = function;
-		}
-		root_fsolver(const root_fsolver&) = delete;
-		root_fsolver& operator=(const root_fsolver&) = delete;
-		~root_fsolver()
-		{
-			gsl_root_fsolver_free(p);
-		}
-
-		const char* name(void) const
-		{
-			return gsl_root_fsolver_name(p);
-		}
-		int set(const std::function<double(double)>& f, double lo, double up)
-		{
-			f_ = f;
-
-			_f.params = &f_;
-
-			return gsl_root_fsolver_set(p, &_f, lo, up);
-		}
-		int iterate(void)
-		{
-			return gsl_root_fsolver_iterate(p);
-		}
-		double root(void) const
-		{
-			return gsl_root_fsolver_root(p);
-		}
-		double x_lower(void) const
-		{
-			return gsl_root_fsolver_x_lower(p);
-		}
-		double x_upper(void) const
-		{
-			return gsl_root_fsolver_x_upper(p);
-		}
+		return std::unique_ptr<gsl_root_fsolver, void(*)(gsl_root_fsolver*)>(gsl_root_fsolver_alloc(type), gsl_root_fsolver_free);
 	};
+/*
+	template<class... Ts>
+	inline auto function(const std::function<double(double,Ts ...ts)& f)
+	{
 
+	};
+*/
 } // gsl
 
 #ifdef _DEBUG
 
 inline void test_gsl_root_fsolver()
 {
-	gsl::root_fsolver rs(gsl_root_fsolver_bisection);
-	rs.set([](double x) { return x*x - 2; }, 1, 2);
-	rs.iterate();
+	{
+		auto s = gsl::root_fsolver(gsl_root_fsolver_brent);
+		double params[] = {1,0,-5};
+		auto function = [&params](double x) { return params[0] + x*(params[1] + x*params[2]); };
+//		gsl_root_fsolver_set(s.get(), gsl_function{function,params}, 0, 5);
+	}
 }
 
 #endif // _DEBUG
