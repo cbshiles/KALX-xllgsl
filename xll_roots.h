@@ -120,6 +120,7 @@ struct quadratic_params {
 	double a, b, c;
 };
 
+// This is bad. Why???
 double quadratic(double x, void *params)
 {
 	struct quadratic_params *p 
@@ -227,7 +228,7 @@ inline void test_gsl_root_fsolver()
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}
-	{	// root_fsolve class
+	{	// root_fsolve class with function<double(double)>
 		gsl::root_fsolve s(gsl_root_fsolver_brent);
 
 		std::vector<double> params{-5,0,1}; // -5 + x^2

@@ -48,9 +48,9 @@ HANDLEX WINAPI xll_function_regid(double regid)
 	handlex h;
 
 	try {
-		handle<std::function<double(double)>> h_(new std::function<double(double)>([regid](double x) {
-			return regid_call(regid, x);
-		}));
+		using function = std::function<double(double)>;
+
+		handle<function> h_(new function([regid](double x) { return regid_call(regid, x);}));
 
 		h = h_.get();
 	}
