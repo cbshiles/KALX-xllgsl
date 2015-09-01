@@ -27,32 +27,59 @@ namespace gsl {
 		return _f;
 	}
 
-	/*
-	class function {
-		gsl_function _f;
-	public:
-		function()
-		{ }
-		template<class F>
-		function(F f, void* params)
+	class root_fsolve {
+		using function = std::function<double(double)>;
+
+		function F;
+		gsl_function F_;
+		std::unique_ptr<gsl_root_fsolver, void(*)(gsl_root_fsolver*)> s;
+
+		// provide double(*)(double,void*) signature for gsl_function
+		static double static_function(double x, void* params)
 		{
-			// http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2010/n3043.html
-			_f.function = static_cast<double (*)(double,void *)>(f);
-			_f.params = params;
+			const function& f = *reinterpret_cast<function*>(params);
+
+			return f(x);
 		}
-		~function()
+	public:
+		root_fsolve(const gsl_root_fsolver_type * type)
+			: s(root_fsolver(type))
 		{ }
-		gsl_function* operator&()
+		root_fsolve(const root_fsolve&) = delete;
+		root_fsolve& operator=(const root_fsolve&) = delete;
+		~root_fsolve()
+		{ }
+
+		// needed for gsl_root_fsolver_* routines
+		gsl_root_fsolver* get() const
 		{
-			return &_f;
+			return s.get();
+		}
+		// syntactic sugar
+		operator gsl_root_fsolver*() const
+		{
+			return get();
+		}
+
+		int set(const function& f, double lo, double hi)
+		{
+			F = f;
+			F_.function = static_function;
+			F_.params = &F;
+
+			return gsl_root_fsolver_set(s.get(), &F_, lo, hi);
+		}
+		int iterate()
+		{
+			return gsl_root_fsolver_iterate(s.get());
 		}
 	};
-	*/
 
 } // gsl
 
 #ifdef _DEBUG
 #include <cassert>
+#include <vector>
 #include <gsl/gsl_poly.h>
 
 // http://www.gnu.org/software/gsl/manual/html_node/Root-Finding-Examples.html#Root-Finding-Examples
@@ -127,7 +154,7 @@ inline void test_gsl_root_fsolver()
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}
-	{
+	{	// simple inline function wrappers
 		auto s = gsl::root_fsolver(gsl_root_fsolver_brent);
 
 		double params[] = {-5,0,1}; // -5 + x^2
@@ -145,6 +172,26 @@ inline void test_gsl_root_fsolver()
 				break;
 		}
 		
+		double root = gsl_root_fsolver_root(s.get());
+		double sqrt5 = sqrt(5.);
+		assert (fabs(root - sqrt5) < sqrt5*epsrel);
+	}
+	{	// root_fsolve class
+		gsl::root_fsolve s(gsl_root_fsolver_brent);
+
+		std::vector<double> params{-5,0,1}; // -5 + x^2
+		double x_lo = 0.0, x_hi = 5.0, epsrel = 1e-6;
+		s.set([&params](double x) { return gsl_poly_eval(&params[0], params.size(), x); }, x_lo, x_hi);
+
+		while (GSL_SUCCESS == s.iterate()) {
+			x_lo = gsl_root_fsolver_x_lower(s.get());
+			x_hi = gsl_root_fsolver_x_upper(s); // operator gsl_root_fsolver*
+
+			// |x_lo - x_hi| < epsabs + epsrel * min(|x_lo|, |x_hi|)
+			if (GSL_SUCCESS == gsl_root_test_interval(x_lo, x_hi, 0, epsrel))
+				break;
+		}
+
 		double root = gsl_root_fsolver_root(s.get());
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
