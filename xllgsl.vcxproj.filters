@@ -44,6 +44,9 @@
     <ClCompile Include="specfun\xll_sf_bessel.cpp">
       <Filter>specfun</Filter>
     </ClCompile>
+    <ClCompile Include="xll_function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">

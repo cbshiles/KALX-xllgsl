@@ -69,12 +69,43 @@ namespace gsl {
 
 			return gsl_root_fsolver_set(s.get(), &F_, lo, hi);
 		}
+
 		int iterate()
 		{
 			return gsl_root_fsolver_iterate(s.get());
 		}
+		double x_lower() const
+		{
+			return gsl_root_fsolver_x_lower(s.get());
+		}
+		double x_upper() const
+		{
+			return gsl_root_fsolver_x_upper(s.get());
+		}
+		double root() const
+		{
+			return gsl_root_fsolver_root(s.get());
+		}
+
+		// specify convergence condition
+		double solve(const std::function<bool(const root_fsolve&)>& done)
+		{
+			while (GSL_SUCCESS == iterate()) {
+				if (done(*this))
+					break;
+			}
+
+			return root();
+		}
 	};
 
+	// convergence helper functions
+	inline auto root_test_interval(double epsabs, double epsrel)
+	{
+		return [epsabs,epsrel](const root_fsolve& s) {
+			return GSL_SUCCESS == gsl_root_test_interval(s.x_lower(), s.x_upper(), epsabs, epsrel);
+		};
+	}
 } // gsl
 
 #ifdef _DEBUG
@@ -193,6 +224,17 @@ inline void test_gsl_root_fsolver()
 		}
 
 		double root = gsl_root_fsolver_root(s.get());
+		double sqrt5 = sqrt(5.);
+		assert (fabs(root - sqrt5) < sqrt5*epsrel);
+	}
+	{	// root_fsolve class
+		gsl::root_fsolve s(gsl_root_fsolver_brent);
+
+		std::vector<double> params{-5,0,1}; // -5 + x^2
+		double x_lo = 0.0, x_hi = 5.0, epsrel = 1e-6;
+		s.set([&params](double x) { return gsl_poly_eval(&params[0], params.size(), x); }, x_lo, x_hi);
+		
+		double root = s.solve(gsl::root_test_interval(0, epsrel));
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}
