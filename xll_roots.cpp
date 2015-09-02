@@ -8,21 +8,21 @@ XLL_ENUM_DOCX(p2h<const gsl_root_fsolver_type>(gsl_root_fsolver_bisection),GSL_R
 XLL_ENUM_DOCX(p2h<const gsl_root_fsolver_type>(gsl_root_fsolver_brent),GSL_ROOT_FSOLVER_BRENT, CATEGORY, _T("Brent method solver"), _T("Documentation"));
 XLL_ENUM_DOCX(p2h<const gsl_root_fsolver_type>(gsl_root_fsolver_falsepos),GSL_ROOT_FSOLVER_FALSEPOS, CATEGORY, _T("False position method solver"), _T("Documentation"));
 
-static AddInX xai_root_fsolve(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve"), PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver"), PREFIX _T("ROOT.SOLVER"))
 	.Arg(XLL_HANDLEX, _T("Type"), _T("is the type of solver from the GSL_ROOT_FSOLVER_* enumeration"))
 	.Uncalced()
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return a handle to a gsl::root::fsolve object."))
+	.FunctionHelp(_T("Return a handle to a gsl::root::fsolver object."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_root_fsolve(HANDLEX type)
+HANDLEX WINAPI xll_root_fsolver(HANDLEX type)
 {
 #pragma XLLEXPORT
 	handlex h;
 
 	try {
-		handle<gsl::root_fsolve> h_(new gsl::root_fsolve(h2p<gsl_root_fsolver_type>(type)));
+		handle<gsl::root_fsolver> h_(new gsl::root_fsolver(h2p<gsl_root_fsolver_type>(type)));
 
 		h = h_.get();
 	}
@@ -33,21 +33,21 @@ HANDLEX WINAPI xll_root_fsolve(HANDLEX type)
 	return h;
 }
 
-static AddInX xai_root_fsolve_set(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve_set"), PREFIX _T("ROOT.SOLVE.SET"))
-	.Arg(XLL_HANDLEX, _T("Solve"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver_set(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver_set"), PREFIX _T("ROOT.SOLVER.SET"))
+	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVER"))
 	.Arg(XLL_HANDLEX, _T("Function"), _T("is a handle used by XLL.FUNCTION."))
 	.Arg(XLL_DOUBLEX, _T("Lo"), _T("is the lower bound of the search interval."))
 	.Arg(XLL_DOUBLEX, _T("Hi"), _T("is the upper bound of the search interval."))
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return a handle to a gsl::root::fsolve object with function and bounds set."))
+	.FunctionHelp(_T("Return a handle to a gsl::root::fsolver object with function and bounds set."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_root_fsolve_set(HANDLEX h, HANDLEX f, double lo, double hi)
+HANDLEX WINAPI xll_root_fsolver_set(HANDLEX h, HANDLEX f, double lo, double hi)
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fsolve> h_(h);
+		handle<gsl::root_fsolver> h_(h);
 		handle<std::function<double(double)>> f_(f);
 
 		h_->set(*f_, lo, hi);
@@ -59,18 +59,18 @@ HANDLEX WINAPI xll_root_fsolve_set(HANDLEX h, HANDLEX f, double lo, double hi)
 	return h;
 }
 
-static AddInX xai_root_fsolve_iterate(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve_iterate"), PREFIX _T("ROOT.SOLVE.ITERATE"))
-	.Arg(XLL_HANDLEX, _T("Solve"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver_iterate(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver_iterate"), PREFIX _T("ROOT.SOLVER.ITERATE"))
+	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVER"))
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return a handle to a gsl::root::fsolve object after one iteration step."))
+	.FunctionHelp(_T("Return a handle to a gsl::root::fsolver object after one iteration step."))
 	.Documentation(_T(""))
 	);
-HANDLEX WINAPI xll_root_fsolve_iterate(HANDLEX h)
+HANDLEX WINAPI xll_root_fsolver_iterate(HANDLEX h)
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fsolve> h_(h);
+		handle<gsl::root_fsolver> h_(h);
 
 		ensure (GSL_SUCCESS == h_->iterate());
 	}
@@ -81,20 +81,20 @@ HANDLEX WINAPI xll_root_fsolve_iterate(HANDLEX h)
 	return h;
 }
 
-static AddInX xai_root_fsolve_root(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve_root"), PREFIX _T("ROOT.SOLVE.ROOT"))
-	.Arg(XLL_HANDLEX, _T("Solve"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver_root(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver_root"), PREFIX _T("ROOT.SOLVER.ROOT"))
+	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVER"))
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return the current root estimate of a gsl::root::fsolve object."))
+	.FunctionHelp(_T("Return the current root estimate of a gsl::root::fsolver object."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_root_fsolve_root(HANDLEX h)
+HANDLEX WINAPI xll_root_fsolver_root(HANDLEX h)
 {
 #pragma XLLEXPORT
 	handlex root;
 
 	try {
-		handle<gsl::root_fsolve> h_(h);
+		handle<gsl::root_fsolver> h_(h);
 
 		root = h_->root();
 	}
@@ -105,20 +105,20 @@ HANDLEX WINAPI xll_root_fsolve_root(HANDLEX h)
 	return root;
 }
 
-static AddInX xai_root_fsolve_x_lower(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve_x_lower"), PREFIX _T("ROOT.SOLVE.X.LOWER"))
-	.Arg(XLL_HANDLEX, _T("Solve"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver_x_lower(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver_x_lower"), PREFIX _T("ROOT.SOLVER.X.LOWER"))
+	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVER"))
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return the current lower root bound of a gsl::root::fsolve object."))
+	.FunctionHelp(_T("Return the current lower root bound of a gsl::root::fsolver object."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_root_fsolve_x_lower(HANDLEX h)
+HANDLEX WINAPI xll_root_fsolver_x_lower(HANDLEX h)
 {
 #pragma XLLEXPORT
 	handlex lo;
 
 	try {
-		handle<gsl::root_fsolve> h_(h);
+		handle<gsl::root_fsolver> h_(h);
 
 		lo = h_->x_lower();
 	}
@@ -129,20 +129,20 @@ HANDLEX WINAPI xll_root_fsolve_x_lower(HANDLEX h)
 	return lo;
 }
 
-static AddInX xai_root_fsolve_x_upper(
-	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolve_x_upper"), PREFIX _T("ROOT.SOLVE.X.UPPER"))
-	.Arg(XLL_HANDLEX, _T("Solve"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVE"))
+static AddInX xai_root_fsolver_x_upper(
+	FunctionX(XLL_HANDLEX, _T("?xll_root_fsolver_x_upper"), PREFIX _T("ROOT.SOLVER.X.UPPER"))
+	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by ") PREFIX _T("ROOT.SOLVER"))
 	.Category(CATEGORY)
-	.FunctionHelp(_T("Return the current upper root bound of a gsl::root::fsolve object."))
+	.FunctionHelp(_T("Return the current upper root bound of a gsl::root::fsolver object."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_root_fsolve_x_upper(HANDLEX h)
+HANDLEX WINAPI xll_root_fsolver_x_upper(HANDLEX h)
 {
 #pragma XLLEXPORT
 	handlex lo;
 
 	try {
-		handle<gsl::root_fsolve> h_(h);
+		handle<gsl::root_fsolver> h_(h);
 
 		lo = h_->x_upper();
 	}
