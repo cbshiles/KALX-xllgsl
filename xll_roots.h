@@ -22,7 +22,7 @@ namespace gsl {
 		// provide double(*)(double,void*) signature for gsl_function
 		static double static_function(double x, void* params)
 		{
-			const function& f = *reinterpret_cast<function*>(params);
+			const function& f = *static_cast<function*>(params);
 
 			return f(x);
 		}
@@ -107,7 +107,7 @@ namespace gsl {
 		// provide pointers for gsl_function_fdf
 		static double static_f(double x, void* params)
 		{
-			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+			const fdfunction& f = *static_cast<fdfunction*>(params);
 
 			return std::get<0>(f)(x);
 		}

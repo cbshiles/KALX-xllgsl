@@ -1,4 +1,5 @@
 // xll_sf.h - GSL special functions
+// http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html#Special-Functions
 #include "gsl/gsl_sf.h"
 #include "xll_gsl.h"
 
