@@ -1,18 +1,22 @@
-// xll_function.cpp - std::function<double(double)> objects
+// xll_function.cpp - std::function<vector<double>(const vector<double>&)> objects
+// Use allocators to avoid copying???
 #include <functional>
 #include "xll_gsl.h"
 
 using namespace xll;
 
-inline double regid_call(double regid, double x)
+using function = std::function<double(double)>;
+
+inline double udf(double regid, double x)
 {
+	// check regid???
 	return XLL_XL_(UDF, OPERX(regid), OPERX(x)).val.num;
 }
 
 static AddInX xai_function_call(
 	FunctionX(XLL_DOUBLEX, _T("?xll_function_call"), _T("XLL.FUNCTION.CALL"))
-	.Arg(XLL_DOUBLEX, _T("f"), _T("is the handle of a function taking a double and returning a double."))
-	.Arg(XLL_DOUBLEX, _T("x"), _T("is argument to call the function."))
+	.Arg(XLL_HANDLEX, _T("f"), _T("is the handle of a function."))
+	.Arg(XLL_DOUBLEX, _T("x"), _T("is an array of one or more number."))
 	.Category(_T("XLL"))
 	.FunctionHelp(_T("Returns f(x)."))
 	.Documentation(_T(""))
@@ -23,12 +27,14 @@ double WINAPI xll_function_call(HANDLEX f, double x)
 	handlex y;
 
 	try {
-		handle<std::function<double(double)>> f_(f);
+		handle<function> f_(f);
 
 		y = (*f_)(x);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
+
+		return 0;
 	}
 
 	return y;
@@ -36,7 +42,7 @@ double WINAPI xll_function_call(HANDLEX f, double x)
 
 static AddInX xai_function_regid(
 	FunctionX(XLL_HANDLEX, _T("?xll_function_regid"), _T("XLL.FUNCTION.REGID"))
-	.Arg(XLL_DOUBLEX, _T("Regid"), _T("is the register id of a function taking a double and returning a double."))
+	.Arg(XLL_HANDLEX, _T("Regid"), _T("is an array of register ids of functions taking a array and returning a double."))
 	.Uncalced()
 	.Category(_T("XLL"))
 	.FunctionHelp(_T("Create a std::function<double(double)> handle."))
@@ -48,9 +54,9 @@ HANDLEX WINAPI xll_function_regid(double regid)
 	handlex h;
 
 	try {
-		using function = std::function<double(double)>;
-
-		handle<function> h_(new function([regid](double x) { return regid_call(regid, x);}));
+		handle<function> h_(new function([regid](double x) {
+			return udf(regid, x);
+		}));
 
 		h = h_.get();
 	}

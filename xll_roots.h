@@ -1,15 +1,19 @@
 // xll_roots.h - GSL 1-dim root finding
+// http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html#One-dimensional-Root_002dFinding
 #pragma once
 #include <functional>
 #include <memory>
 #include <stdexcept>
+#include <tuple>
 #include "gsl/gsl_errno.h"
 #include "gsl/gsl_roots.h"
 
 namespace gsl {
 
+	using function = std::function<double(double)>;
+
+	// root bracketing solvers
 	class root_fsolver {
-		using function = std::function<double(double)>;
 
 		function F;
 		gsl_function F_;
@@ -53,6 +57,7 @@ namespace gsl {
 			return gsl_root_fsolver_set(s, &F_, lo, hi);
 		}
 
+		// forward to gsl_root_fsolver_* functions
 		int iterate()
 		{
 			return gsl_root_fsolver_iterate(s);
@@ -87,6 +92,101 @@ namespace gsl {
 	{
 		return [epsabs,epsrel](const root_fsolver& s) {
 			return GSL_SUCCESS == gsl_root_test_interval(s.x_lower(), s.x_upper(), epsabs, epsrel);
+		};
+	}
+
+	// root finding using derivatives
+	class root_fdfsolver {
+		// function and its derivative
+		using fdfunction = std::tuple<function,function>;
+
+		fdfunction FdF;
+		gsl_function_fdf F_;
+		gsl_root_fdfsolver* s;
+
+		// provide pointers for gsl_function_fdf
+		static double static_f(double x, void* params)
+		{
+			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+
+			return std::get<0>(f)(x);
+		}
+		static double static_df(double x, void* params)
+		{
+			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+
+			return std::get<1>(f)(x);
+		}
+		static void static_fdf(double x, void* params, double* fx, double* dfx)
+		{
+			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+
+			*fx = std::get<0>(f)(x);
+			*dfx = std::get<1>(f)(x);
+		}
+	public:
+		root_fdfsolver(const gsl_root_fdfsolver_type * type)
+			: s(gsl_root_fdfsolver_alloc(type))
+		{ }
+		root_fdfsolver(const root_fdfsolver&) = delete;
+		root_fdfsolver& operator=(const root_fdfsolver&) = delete;
+		~root_fdfsolver()
+		{
+			gsl_root_fdfsolver_free(s);
+		}
+
+		// needed for gsl_root_fdfsolver_* routines
+		gsl_root_fdfsolver* get() const
+		{
+			return s;
+		}
+		// syntactic sugar
+		operator gsl_root_fdfsolver*() const
+		{
+			return s;
+		}
+
+		int set(const function& f, const function& df, double x0)
+		{
+			FdF = std::make_tuple(f, df);
+
+			F_.f = static_f;
+			F_.df = static_df;
+			F_.fdf = static_fdf;
+			F_.params = &FdF;
+
+			return gsl_root_fdfsolver_set(s, &F_, x0);
+		}
+
+		// forward to gsl_root_fdfsolver_* functions
+		int iterate()
+		{
+			return gsl_root_fdfsolver_iterate(s);
+		}
+		double root() const
+		{
+			return gsl_root_fdfsolver_root(s);
+		}
+
+		// specify convergence condition given previous root
+		double solve(const std::function<bool(const root_fdfsolver&,double)>& done)
+		{
+			double x = root();
+			while (GSL_SUCCESS == iterate()) {
+				if (done(*this, x))
+					break;
+				x = root();
+			}
+
+			return root();
+		}
+	};
+
+	// convergence helper functions
+	inline auto root_test_delta(double epsabs, double epsrel)
+	{
+		return [epsabs,epsrel](const root_fdfsolver& s, double x) {
+			return GSL_SUCCESS == gsl_root_test_delta(x, s.root(), epsabs, epsrel);
 		};
 	}
 } // gsl
@@ -179,6 +279,27 @@ inline void test_gsl_root_fsolver()
 		s.set(F, x_lo, x_hi);
 		
 		double root = s.solve(gsl::root_test_interval(0, epsrel));
+		double sqrt5 = sqrt(5.);
+		assert (fabs(root - sqrt5) < sqrt5*epsrel);
+	}
+}
+inline void test_gsl_root_fdfsolver()
+{
+	// root_fdfsolver class with function<tuple<double,double>(double)>
+	{
+		gsl::root_fdfsolver s(gsl_root_fdfsolver_newton);
+
+		// F(x) = x^2 - 5
+		auto F = [](double x) {
+			return x*x - 5;
+		};
+		auto dF = [](double x) { 
+			return 2*x;
+		};
+		double x = 5.0, epsrel = 1e-6;
+		s.set(F, dF, x);
+
+		double root = s.solve(gsl::root_test_delta(0, epsrel));
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}
