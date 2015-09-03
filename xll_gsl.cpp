@@ -21,11 +21,7 @@ void xll_error_handler (const char * reason,
 
 int xll_set_error_handler(void)
 {
-#ifdef _DEBUG
 	gsl_set_error_handler(xll_error_handler);
-#else
-	gsl_set_error_handler_off();
-#endif
 
 	return 1;
 }

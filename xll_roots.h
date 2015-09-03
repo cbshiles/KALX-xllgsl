@@ -113,13 +113,13 @@ namespace gsl {
 		}
 		static double static_df(double x, void* params)
 		{
-			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+			const fdfunction& f = *static_cast<fdfunction*>(params);
 
 			return std::get<1>(f)(x);
 		}
 		static void static_fdf(double x, void* params, double* fx, double* dfx)
 		{
-			const fdfunction& f = *reinterpret_cast<fdfunction*>(params);
+			const fdfunction& f = *static_cast<fdfunction*>(params);
 
 			*fx = std::get<0>(f)(x);
 			*dfx = std::get<1>(f)(x);
