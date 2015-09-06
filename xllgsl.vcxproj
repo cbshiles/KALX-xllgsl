@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="multimin\xll_multimin.cpp" />
     <ClCompile Include="specfun\xll_legendre_p.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -38,6 +37,7 @@
     </ClCompile>
     <ClCompile Include="xll_function.cpp" />
     <ClCompile Include="xll_gsl.cpp" />
+    <ClCompile Include="xll_multimin.cpp" />
     <ClCompile Include="xll_poly.cpp" />
     <ClCompile Include="xll_rng.cpp" />
     <ClCompile Include="xll_roots.cpp" />

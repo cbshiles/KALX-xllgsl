@@ -50,9 +50,6 @@
     <ClCompile Include="specfun\xll_sf_zeta.cpp">
       <Filter>specfun</Filter>
     </ClCompile>
-    <ClCompile Include="multimin\xll_multimin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="specfun\xll_legendre_p.cpp">
       <Filter>specfun</Filter>
     </ClCompile>
@@ -73,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_lambert.cpp">
       <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_multimin.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

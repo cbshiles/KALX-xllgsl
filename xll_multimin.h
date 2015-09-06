@@ -1,4 +1,5 @@
 // xll_multimin.h - Wrappers for gsl_multimin.h
+// http://www.gnu.org/software/gsl/manual/html_node/Multidimensional-Minimization.html#Multidimensional-Minimization
 #pragma once
 #include <functional>
 #include <stdexcept>
