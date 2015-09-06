@@ -50,6 +50,9 @@
     <ClCompile Include="specfun\xll_sf_zeta.cpp">
       <Filter>specfun</Filter>
     </ClCompile>
+    <ClCompile Include="multimin\xll_multimin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -713,6 +716,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_roots.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_multimin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

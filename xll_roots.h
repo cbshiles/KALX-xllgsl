@@ -10,10 +10,12 @@
 
 namespace gsl {
 
+namespace root {
+
 	using function = std::function<double(double)>;
 
 	// root bracketing solvers
-	class root_fsolver {
+	class fsolver {
 
 		function F;
 		gsl_function F_;
@@ -27,12 +29,12 @@ namespace gsl {
 			return f(x);
 		}
 	public:
-		root_fsolver(const gsl_root_fsolver_type * type)
+		fsolver(const gsl_root_fsolver_type * type)
 			: s(gsl_root_fsolver_alloc(type))
 		{ }
-		root_fsolver(const root_fsolver&) = delete;
-		root_fsolver& operator=(const root_fsolver&) = delete;
-		~root_fsolver()
+		fsolver(const fsolver&) = delete;
+		fsolver& operator=(const fsolver&) = delete;
+		~fsolver()
 		{
 			gsl_root_fsolver_free(s);
 		}
@@ -76,7 +78,7 @@ namespace gsl {
 		}
 
 		// specify convergence condition
-		double solve(const std::function<bool(const root_fsolver&)>& done)
+		double solve(const std::function<bool(const fsolver&)>& done)
 		{
 			while (GSL_SUCCESS == iterate()) {
 				if (done(*this))
@@ -88,15 +90,15 @@ namespace gsl {
 	};
 
 	// convergence helper functions
-	inline auto root_test_interval(double epsabs, double epsrel)
+	inline auto test_interval(double epsabs, double epsrel)
 	{
-		return [epsabs,epsrel](const root_fsolver& s) {
+		return [epsabs,epsrel](const fsolver& s) {
 			return GSL_SUCCESS == gsl_root_test_interval(s.x_lower(), s.x_upper(), epsabs, epsrel);
 		};
 	}
 
 	// root finding using derivatives
-	class root_fdfsolver {
+	class fdfsolver {
 		// function and its derivative
 		using fdfunction = std::tuple<function,function>;
 
@@ -125,12 +127,12 @@ namespace gsl {
 			*dfx = std::get<1>(f)(x);
 		}
 	public:
-		root_fdfsolver(const gsl_root_fdfsolver_type * type)
+		fdfsolver(const gsl_root_fdfsolver_type * type)
 			: s(gsl_root_fdfsolver_alloc(type))
 		{ }
-		root_fdfsolver(const root_fdfsolver&) = delete;
-		root_fdfsolver& operator=(const root_fdfsolver&) = delete;
-		~root_fdfsolver()
+		fdfsolver(const fdfsolver&) = delete;
+		fdfsolver& operator=(const fdfsolver&) = delete;
+		~fdfsolver()
 		{
 			gsl_root_fdfsolver_free(s);
 		}
@@ -169,7 +171,7 @@ namespace gsl {
 		}
 
 		// specify convergence condition given previous root
-		double solve(const std::function<bool(const root_fdfsolver&,double)>& done)
+		double solve(const std::function<bool(const fdfsolver&,double)>& done)
 		{
 			double x = root();
 			while (GSL_SUCCESS == iterate()) {
@@ -183,12 +185,14 @@ namespace gsl {
 	};
 
 	// convergence helper functions
-	inline auto root_test_delta(double epsabs, double epsrel)
+	inline auto test_delta(double epsabs, double epsrel)
 	{
-		return [epsabs,epsrel](const root_fdfsolver& s, double x) {
+		return [epsabs,epsrel](const fdfsolver& s, double x) {
 			return GSL_SUCCESS == gsl_root_test_delta(x, s.root(), epsabs, epsrel);
 		};
 	}
+
+	} // root
 } // gsl
 
 #ifdef _DEBUG
@@ -271,14 +275,14 @@ inline void test_gsl_root_fsolver()
 	}
 	// root_fsolver class with function<double(double)>
 	{
-		gsl::root_fsolver s(gsl_root_fsolver_brent);
+		gsl::root::fsolver s(gsl_root_fsolver_brent);
 
 		std::vector<double> params{-5,0,1}; // -5 + x^2
-		auto F = [&params](double x) { return gsl_poly_eval(&params[0], params.size(), x); };
+		auto F = [&params](double x) { return gsl_poly_eval(&params[0], static_cast<int>(params.size()), x); };
 		double x_lo = 0.0, x_hi = 5.0, epsrel = 1e-6;
 		s.set(F, x_lo, x_hi);
 		
-		double root = s.solve(gsl::root_test_interval(0, epsrel));
+		double root = s.solve(gsl::root::test_interval(0, epsrel));
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}
@@ -287,7 +291,7 @@ inline void test_gsl_root_fdfsolver()
 {
 	// root_fdfsolver class with function<tuple<double,double>(double)>
 	{
-		gsl::root_fdfsolver s(gsl_root_fdfsolver_newton);
+		gsl::root::fdfsolver s(gsl_root_fdfsolver_newton);
 
 		// F(x) = x^2 - 5
 		auto F = [](double x) {
@@ -299,7 +303,7 @@ inline void test_gsl_root_fdfsolver()
 		double x = 5.0, epsrel = 1e-6;
 		s.set(F, dF, x);
 
-		double root = s.solve(gsl::root_test_delta(0, epsrel));
+		double root = s.solve(gsl::root::test_delta(0, epsrel));
 		double sqrt5 = sqrt(5.);
 		assert (fabs(root - sqrt5) < sqrt5*epsrel);
 	}

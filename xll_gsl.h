@@ -1,4 +1,5 @@
 // xll_gsl.h - common header file for all GSL routines
+// http://www.gnu.org/software/gsl/manual/html_node/
 // Copyright (c) 2011 KALX, LLC. All rights reserved. No warranty is made.
 // Uncomment for Excel 2007 and above.
 //#define EXCEL12

@@ -24,7 +24,7 @@ HANDLEX WINAPI xll_root_fsolver(HANDLEX type)
 	handlex h;
 
 	try {
-		handle<gsl::root_fsolver> h_(new gsl::root_fsolver(h2p<gsl_root_fsolver_type>(type)));
+		handle<gsl::root::fsolver> h_(new gsl::root::fsolver(h2p<gsl_root_fsolver_type>(type)));
 
 		h = h_.get();
 	}
@@ -49,7 +49,7 @@ HANDLEX WINAPI xll_root_fsolver_set(HANDLEX h, HANDLEX f, double lo, double hi)
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fsolver> h_(h);
+		handle<gsl::root::fsolver> h_(h);
 		handle<function> f_(f);
 
 		h_->set(*f_, lo, hi);
@@ -72,7 +72,7 @@ HANDLEX WINAPI xll_root_fsolver_iterate(HANDLEX h)
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fsolver> h_(h);
+		handle<gsl::root::fsolver> h_(h);
 
 		ensure (GSL_SUCCESS == h_->iterate());
 	}
@@ -96,7 +96,7 @@ HANDLEX WINAPI xll_root_fsolver_root(HANDLEX h)
 	handlex root;
 
 	try {
-		handle<gsl::root_fsolver> h_(h);
+		handle<gsl::root::fsolver> h_(h);
 
 		root = h_->root();
 	}
@@ -120,7 +120,7 @@ HANDLEX WINAPI xll_root_fsolver_x_lower(HANDLEX h)
 	handlex lo;
 
 	try {
-		handle<gsl::root_fsolver> h_(h);
+		handle<gsl::root::fsolver> h_(h);
 
 		lo = h_->x_lower();
 	}
@@ -144,7 +144,7 @@ HANDLEX WINAPI xll_root_fsolver_x_upper(HANDLEX h)
 	handlex lo;
 
 	try {
-		handle<gsl::root_fsolver> h_(h);
+		handle<gsl::root::fsolver> h_(h);
 
 		lo = h_->x_upper();
 	}
@@ -173,7 +173,7 @@ HANDLEX WINAPI xll_root_fdfsolver(HANDLEX type)
 	handlex h;
 
 	try {
-		handle<gsl::root_fdfsolver> h_(new gsl::root_fdfsolver(h2p<gsl_root_fdfsolver_type>(type)));
+		handle<gsl::root::fdfsolver> h_(new gsl::root::fdfsolver(h2p<gsl_root_fdfsolver_type>(type)));
 
 		h = h_.get();
 	}
@@ -198,7 +198,7 @@ HANDLEX WINAPI xll_root_fdfsolver_set(HANDLEX h, HANDLEX f, HANDLEX df, double x
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fdfsolver> h_(h);
+		handle<gsl::root::fdfsolver> h_(h);
 		handle<function> f_(f);
 		handle<function> df_(df);
 
@@ -222,7 +222,7 @@ HANDLEX WINAPI xll_root_fdfsolver_iterate(HANDLEX h)
 {
 #pragma XLLEXPORT
 	try {
-		handle<gsl::root_fdfsolver> h_(h);
+		handle<gsl::root::fdfsolver> h_(h);
 
 		ensure (GSL_SUCCESS == h_->iterate());
 	}
@@ -246,7 +246,7 @@ HANDLEX WINAPI xll_root_fdfsolver_root(HANDLEX h)
 	handlex root;
 
 	try {
-		handle<gsl::root_fdfsolver> h_(h);
+		handle<gsl::root::fdfsolver> h_(h);
 
 		root = h_->root();
 	}
