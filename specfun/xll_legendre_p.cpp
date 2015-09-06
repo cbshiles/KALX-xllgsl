@@ -24,8 +24,7 @@ Function: double gsl_sf_legendre_P1 (double x)
 */
 static AddInX xai_xll_sf_legendre_p(
 	FunctionX(XLL_DOUBLEX, _T("?xll_sf_legendre_p"), PREFIX _T("SF.LEGENDREP1"))
-	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)
-	
+	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)	
 	.Category(CATEGORY)
 	.FunctionHelp(_T("The Legendre function Le(x)"))
 	//	.Documentation(R_(

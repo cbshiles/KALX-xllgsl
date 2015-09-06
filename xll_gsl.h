@@ -83,7 +83,7 @@ namespace xll {
 
 			return array[i];
 		}
-		double &operator[](xword i)
+		double& operator[](xword i)
 		{
 			ensure (i < 2);
 

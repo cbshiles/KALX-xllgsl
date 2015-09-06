@@ -53,6 +53,27 @@
     <ClCompile Include="multimin\xll_multimin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="specfun\xll_legendre_p.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_dawson.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_debye.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_erf.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_expint.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_laguerre.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
+    <ClCompile Include="specfun\xll_sf_lambert.cpp">
+      <Filter>specfun</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
