@@ -16,13 +16,11 @@ where W < -1 for x < 0. The Lambert functions are declared in the header file gs
 /*
 Function: double gsl_sf_lambert_W0 (double x)Function: int gsl_sf_lambert_W0_e (double x, gsl_sf_result * result)
 These compute the principal branch of the Lambert W function, W_0(x).
-
 */
 
-static AddInX xai_xll_sf_lambert(
+static AddInX xai_xll_sf_lambert_W0(
 	FunctionX(XLL_DOUBLEX, _T("?xll_sf_lambert_W0"), PREFIX _T("SF.LAMBERT.W0"))
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)
-	//	.Arg(XLL_WORDX, _T("_mode"), IS_PREC, GSL_MODE_DEFAULT)
 	.Category(CATEGORY)
 	.FunctionHelp(_T("The Lambert function W_0(x)"))
 	.Documentation(R_(
@@ -60,9 +58,9 @@ W0(1.0) = 0.567143290409783872
 double x = 1.0;
 double expected = 0.567143290409783872;
 double y = xll_sf_lambert_W0(x);
-double error_bound = 0.000000000000001; //10^-15
+double error_bound = 1e-15;
 
-ensure(abs(y - expected) < error_bound);
+ensure(fabs(y - expected) < error_bound);
 
 XLL_TEST_END(test_sf_lambert)
 

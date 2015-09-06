@@ -16,7 +16,7 @@ The functions described in this section are declared in the header file gsl_sf_l
 Function: double gsl_sf_laguerre_n (const int n, const double a, const double x)
 */
 static AddInX xai_xll_sf_laguerre_n(
-	FunctionX(XLL_DOUBLEX, _T("?xll_sf_laguerre_n"), PREFIX _T("SF.LaguerreN"))
+	FunctionX(XLL_DOUBLEX, _T("?xll_sf_laguerre_n"), PREFIX _T("SF.LAGUERRE.N"))
 	.Arg(XLL_WORDX, _T("n"), _T("is an integer"), 1)
 	.Arg(XLL_DOUBLEX, _T("a"), _T("is a number."), 1.)
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)

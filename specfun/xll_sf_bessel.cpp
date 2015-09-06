@@ -32,10 +32,9 @@ storing the results in the array result_array. The values are computed using rec
 and therefore may differ slightly from the exact values.
 */
 
-static AddInX xai_xll_sf_bessel(
+static AddInX xai_xll_sf_bessel_J0(
 	FunctionX(XLL_DOUBLEX, _T("?xll_sf_bessel_J0"), PREFIX _T("SF.BESSEL.J0"))
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)
-//	.Arg(XLL_WORDX, _T("_mode"), IS_PREC, GSL_MODE_DEFAULT)
 	.Category(CATEGORY)
 	.FunctionHelp(_T("The Bessel function J_0(x)"))
 	.Documentation(R_(

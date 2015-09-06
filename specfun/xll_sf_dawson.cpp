@@ -20,7 +20,6 @@ Function: int gsl_sf_dawson_e (double x, gsl_sf_result * result)
 static AddInX xai_xll_sf_dawson(
 	FunctionX(XLL_DOUBLEX, _T("?xll_sf_dawson"), PREFIX _T("SF.DAWSON"))
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)
-	//.Arg(XLL_WORDX, _T("_mode"), IS_PREC, GSL_MODE_DEFAULT)
 	.Category(CATEGORY)
 	.FunctionHelp(_T("The Dawson function Daw(x)"))
 	//	.Documentation(R_(

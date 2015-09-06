@@ -16,7 +16,6 @@ These routines compute the error function erf(x), where erf(x) = (2/\sqrt(\pi)) 
 static AddInX xai_gsl_sf_erf(
 	FunctionX(XLL_DOUBLEX, _T("?xll_sf_erf"), PREFIX _T("SF.ERF"))
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."), 1.)
-	//.Arg(XLL_WORDX, _T("_mode"), IS_PREC, GSL_MODE_DEFAULT)
 	.Category(CATEGORY)
 	.FunctionHelp(_T("The Error function erf(x)"))
 	//	.Documentation(R_(
