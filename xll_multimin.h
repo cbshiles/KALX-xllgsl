@@ -87,9 +87,13 @@ namespace gsl {
 				return gsl_multimin_fminimizer_minimum(s);
 			}
 			// average distance from the geometrical center of the simplex to all its vertices
-			double size() const
+			double radius() const
 			{
 				return gsl_multimin_fminimizer_size(s);
+			}
+			size_t size() const
+			{
+				return gsl_multimin_fminimizer_x(s)->size;
 			}
 			// current best guess
 			const double* x() const
@@ -134,7 +138,7 @@ inline void test_gsl_multimin_fminimizer()
 
 		double eps = 1e-4;
 		int iter = 0;
-		while (s.iterate() == GSL_SUCCESS && s.size() > eps) {
+		while (s.iterate() == GSL_SUCCESS && s.radius() > eps) {
 			++iter;
 		}
 		assert (fabs(s.x()[0] - a[1]) < eps);
@@ -152,7 +156,7 @@ inline void test_gsl_multimin_fminimizer()
 
 		double eps = 1e-4;
 		int iter = 0;
-		while (s.iterate() == GSL_SUCCESS && s.size() > eps) {
+		while (s.iterate() == GSL_SUCCESS && s.radius() > eps) {
 			++iter;
 		}
 		assert (fabs(s.x()[0] - a[1]) < eps);
