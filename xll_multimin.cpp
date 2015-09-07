@@ -37,14 +37,14 @@ HANDLEX WINAPI xll_multimin_fminimizer(HANDLEX type, WORD n)
 
 static AddInX xai_multimin_fminimizer_set(
 	FunctionX(XLL_HANDLEX, _T("?xll_multimin_fminimizer_set"), PREFIX _T("MULTMIN.FMINIMIZER.SET"))
-	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
+	.Arg(XLL_HANDLEX, _T("Minimizer"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
 	.Arg(XLL_HANDLEX, _T("f"), _T("is a handle to a function object"))
 	.Arg(XLL_FPX, _T("x"), _T("is the initial root guess"))
 	.Arg(XLL_FPX, _T("dx"), _T("is the initial root setp"))
 	.FunctionHelp(_T("Return a handle to a gsl::multimin::fminimizer object"))
 	.Category(CATEGORY)
 	.Documentation(_T(""))
-	);
+);
 HANDLEX WINAPI xll_multimin_fminimizer_set(HANDLEX s, HANDLEX f, xfpx* px, xfpx* pdx)
 {
 #pragma XLLEXPORT
@@ -65,11 +65,11 @@ HANDLEX WINAPI xll_multimin_fminimizer_set(HANDLEX s, HANDLEX f, xfpx* px, xfpx*
 
 static AddInX xai_multimin_fminimizer_iterate(
 	FunctionX(XLL_HANDLEX, _T("?xll_multimin_fminimizer_iterate"), PREFIX _T("MULTMIN.FMINIMIZER.ITERATE"))
-	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
+	.Arg(XLL_HANDLEX, _T("Minimizer"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
 	.FunctionHelp(_T("Return a handle to a gsl::multimin::fminimizer object after one iteration step."))
 	.Category(CATEGORY)
 	.Documentation(_T(""))
-	);
+);
 HANDLEX WINAPI xll_multimin_fminimizer_iterate(HANDLEX s)
 {
 #pragma XLLEXPORT
@@ -87,7 +87,7 @@ HANDLEX WINAPI xll_multimin_fminimizer_iterate(HANDLEX s)
 
 static AddInX xai_multimin_fminimizer_minimum(
 	FunctionX(XLL_DOUBLEX, _T("?xll_multimin_fminimizer_minimum"), PREFIX _T("MULTMIN.FMINIMIZER.MINIMUM"))
-	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
+	.Arg(XLL_HANDLEX, _T("Minimizer"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
 	.FunctionHelp(_T("Return the current minimum."))
 	.Category(CATEGORY)
 	.Documentation(_T(""))
@@ -111,11 +111,11 @@ double WINAPI xll_multimin_fminimizer_minimum(HANDLEX s)
 
 static AddInX xai_multimin_fminimizer_radius(
 	FunctionX(XLL_DOUBLEX, _T("?xll_multimin_fminimizer_radius"), PREFIX _T("MULTMIN.FMINIMIZER.RADIUS"))
-	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
+	.Arg(XLL_HANDLEX, _T("Minimizer"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
 	.FunctionHelp(_T("Return the average distance from the geometrical center of the simplex to all its vertices."))
 	.Category(CATEGORY)
 	.Documentation(_T(""))
-	);
+);
 double WINAPI xll_multimin_fminimizer_radius(HANDLEX s)
 {
 #pragma XLLEXPORT
@@ -124,7 +124,7 @@ double WINAPI xll_multimin_fminimizer_radius(HANDLEX s)
 	try {
 		handle<gsl::multimin::fminimizer> s_(s);
 
-		r = s_->size();
+		r = s_->radius();
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
@@ -135,7 +135,7 @@ double WINAPI xll_multimin_fminimizer_radius(HANDLEX s)
 
 static AddInX xai_multimin_fminimizer_x(
 	FunctionX(XLL_FPX, _T("?xll_multimin_fminimizer_x"), PREFIX _T("MULTMIN.FMINIMIZER.X"))
-	.Arg(XLL_HANDLEX, _T("Solver"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
+	.Arg(XLL_HANDLEX, _T("Minimizer"), _T("is a handle returned by GSL.MULTIMIN.fminimizer"))
 	.FunctionHelp(_T("Return the current best guess."))
 	.Category(CATEGORY)
 	.Documentation(_T(""))
@@ -168,7 +168,7 @@ static AddInX xai_sumsq(
 	.FunctionHelp(_T("Return a handle to a function returning the sum of the squares of its arguments."))
 	.Documentation(_T(""))
 );
-HANDLEX WINAPI xll_sumsq(WORD n)
+HANDLEX WINAPI xll_sumsq()
 {
 #pragma XLLEXPORT
 	handlex h;
@@ -190,7 +190,7 @@ HANDLEX WINAPI xll_sumsq(WORD n)
 
 XLL_TEST_BEGIN(xll_multimin_fmininimizer)
 
-_crtBreakAlloc = 4384;
+//_crtBreakAlloc = 4385;
 	test_gsl_multimin_fminimizer();
 
 XLL_TEST_END(xll_multimin_fmininimizer)

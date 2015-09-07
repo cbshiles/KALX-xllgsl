@@ -15,8 +15,8 @@ inline double udf(double regid, double x)
 
 static AddInX xai_function_call(
 	FunctionX(XLL_DOUBLEX, _T("?xll_function_call"), _T("XLL.FUNCTION.CALL"))
-	.Arg(XLL_HANDLEX, _T("f"), _T("is the handle of a function."))
-	.Arg(XLL_DOUBLEX, _T("x"), _T("is an array of one or more number."))
+	.Arg(XLL_HANDLEX, _T("f"), _T("is the handle of a std::function<double(double)>."))
+	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."))
 	.Category(_T("XLL"))
 	.FunctionHelp(_T("Returns f(x)."))
 	.Documentation(_T(""))
@@ -42,7 +42,7 @@ double WINAPI xll_function_call(HANDLEX f, double x)
 
 static AddInX xai_function_regid(
 	FunctionX(XLL_HANDLEX, _T("?xll_function_regid"), _T("XLL.FUNCTION.REGID"))
-	.Arg(XLL_HANDLEX, _T("Regid"), _T("is an array of register ids of functions taking a array and returning a double."))
+	.Arg(XLL_HANDLEX, _T("Regid"), _T("is the register id of functions taking a number and returning a number."))
 	.Uncalced()
 	.Category(_T("XLL"))
 	.FunctionHelp(_T("Create a std::function<double(double)> handle."))

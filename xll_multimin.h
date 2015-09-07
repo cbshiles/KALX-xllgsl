@@ -32,6 +32,7 @@ namespace gsl {
 			function<double> F;
 			gsl_multimin_function F_;
 			gsl_vector x_, dx_;
+			int status;
 			static double static_function(const gsl_vector* v, void* params)
 			{
 				const function<double>& f = *static_cast<function<double>*>(params);
@@ -43,8 +44,11 @@ namespace gsl {
 			}
 		public:
 			fminimizer(const gsl_multimin_fminimizer_type* type, size_t n)
-				: s(gsl_multimin_fminimizer_alloc(type, n))
-			{ }
+				: s(gsl_multimin_fminimizer_alloc(type, n)), status(GSL_SUCCESS)
+			{
+				if (s == 0)
+					status = GSL_ENOMEM;
+			}
 			fminimizer(const fminimizer&) = delete;
 			fminimizer& operator=(const fminimizer&) = delete;
 			~fminimizer()
@@ -55,16 +59,19 @@ namespace gsl {
 			// to interface with gsl_multimin_* functions
 			gsl_multimin_fminimizer* get()
 			{
-				return s;
+				return status == GSL_SUCCESS ? s : nullptr;
 			}
 			gsl_multimin_fminimizer* operator&()
 			{
-				return s;
+				return get();
 			}
 
 			// caller responsible for x, dx memory
 			int set(const function<double>& f, size_t n, const double* x, const double* dx)
 			{
+				if (status != GSL_SUCCESS)
+					return status;
+
 				F = f;
 				F_.n = n;
 				F_.params = &F;
@@ -73,31 +80,46 @@ namespace gsl {
 				x_ = make_vector(n, x);
 				dx_ = make_vector(n, dx);
 
-				return gsl_multimin_fminimizer_set(s, &F_, &x_, &dx_);
+				return status = gsl_multimin_fminimizer_set(s, &F_, &x_, &dx_);
 			}
 
 			int iterate()
 			{
-				return gsl_multimin_fminimizer_iterate(s);
+				if (status != GSL_SUCCESS)
+					return status;
+
+				return status = gsl_multimin_fminimizer_iterate(s);
 			}
 
 			// current minumum
 			double minumum() const
 			{
+				if (status != GSL_SUCCESS)
+					return std::numeric_limits<double>::quiet_NaN();
+
 				return gsl_multimin_fminimizer_minimum(s);
 			}
 			// average distance from the geometrical center of the simplex to all its vertices
 			double radius() const
 			{
+				if (status != GSL_SUCCESS)
+					return std::numeric_limits<double>::quiet_NaN();
+
 				return gsl_multimin_fminimizer_size(s);
 			}
 			size_t size() const
 			{
+				if (status != GSL_SUCCESS)
+					return 0;
+
 				return gsl_multimin_fminimizer_x(s)->size;
 			}
 			// current best guess
 			const double* x() const
 			{
+				if (status != GSL_SUCCESS)
+					return 0;
+
 				return gsl_multimin_fminimizer_x(s)->data;
 			}
 
