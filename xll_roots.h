@@ -16,10 +16,11 @@ namespace root {
 
 	// root bracketing solvers
 	class fsolver {
+		using root_fsolver = std::unique_ptr<gsl_root_fsolver,decltype(&::gsl_root_fsolver_free)>;
 
+		root_fsolver s;
 		function F;
 		gsl_function F_;
-		gsl_root_fsolver* s;
 
 		// provide double(*)(double,void*) signature for gsl_function
 		static double static_function(double x, void* params)
@@ -29,25 +30,19 @@ namespace root {
 			return f(x);
 		}
 	public:
-		fsolver(const gsl_root_fsolver_type * type)
-			: s(gsl_root_fsolver_alloc(type))
+		explicit fsolver(const gsl_root_fsolver_type * type)
+			: s{gsl_root_fsolver_alloc(type), &::gsl_root_fsolver_free}
 		{ }
-		fsolver(const fsolver&) = delete;
-		fsolver& operator=(const fsolver&) = delete;
-		~fsolver()
-		{
-			gsl_root_fsolver_free(s);
-		}
 
 		// needed for gsl_root_fsolver_* routines
 		gsl_root_fsolver* get() const
 		{
-			return s;
+			return s.get();
 		}
 		// syntactic sugar
 		operator gsl_root_fsolver*() const
 		{
-			return s;
+			return get();
 		}
 
 		int set(const function& f, double lo, double hi)
@@ -56,25 +51,25 @@ namespace root {
 			F_.function = static_function;
 			F_.params = &F;
 
-			return gsl_root_fsolver_set(s, &F_, lo, hi);
+			return gsl_root_fsolver_set(s.get(), &F_, lo, hi);
 		}
 
 		// forward to gsl_root_fsolver_* functions
 		int iterate()
 		{
-			return gsl_root_fsolver_iterate(s);
+			return gsl_root_fsolver_iterate(s.get());
 		}
 		double x_lower() const
 		{
-			return gsl_root_fsolver_x_lower(s);
+			return gsl_root_fsolver_x_lower(s.get());
 		}
 		double x_upper() const
 		{
-			return gsl_root_fsolver_x_upper(s);
+			return gsl_root_fsolver_x_upper(s.get());
 		}
 		double root() const
 		{
-			return gsl_root_fsolver_root(s);
+			return gsl_root_fsolver_root(s.get());
 		}
 
 		// specify convergence condition
@@ -99,12 +94,15 @@ namespace root {
 
 	// root finding using derivatives
 	class fdfsolver {
+		using root_fdfsolver = std::unique_ptr<gsl_root_fdfsolver,decltype(&::gsl_root_fdfsolver_free)>;
+
+		root_fdfsolver s;
+
 		// function and its derivative
 		using fdfunction = std::tuple<function,function>;
 
 		fdfunction FdF;
 		gsl_function_fdf F_;
-		gsl_root_fdfsolver* s;
 
 		// provide pointers for gsl_function_fdf
 		static double static_f(double x, void* params)
@@ -128,24 +126,18 @@ namespace root {
 		}
 	public:
 		fdfsolver(const gsl_root_fdfsolver_type * type)
-			: s(gsl_root_fdfsolver_alloc(type))
+			: s{gsl_root_fdfsolver_alloc(type),&::gsl_root_fdfsolver_free}
 		{ }
-		fdfsolver(const fdfsolver&) = delete;
-		fdfsolver& operator=(const fdfsolver&) = delete;
-		~fdfsolver()
-		{
-			gsl_root_fdfsolver_free(s);
-		}
 
 		// needed for gsl_root_fdfsolver_* routines
 		gsl_root_fdfsolver* get() const
 		{
-			return s;
+			return s.get();
 		}
 		// syntactic sugar
 		operator gsl_root_fdfsolver*() const
 		{
-			return s;
+			return s.get();
 		}
 
 		int set(const function& f, const function& df, double x0)
@@ -157,17 +149,17 @@ namespace root {
 			F_.fdf = static_fdf;
 			F_.params = &FdF;
 
-			return gsl_root_fdfsolver_set(s, &F_, x0);
+			return gsl_root_fdfsolver_set(s.get(), &F_, x0);
 		}
 
 		// forward to gsl_root_fdfsolver_* functions
 		int iterate()
 		{
-			return gsl_root_fdfsolver_iterate(s);
+			return gsl_root_fdfsolver_iterate(s.get());
 		}
 		double root() const
 		{
-			return gsl_root_fdfsolver_root(s);
+			return gsl_root_fdfsolver_root(s.get());
 		}
 
 		// specify convergence condition given previous root

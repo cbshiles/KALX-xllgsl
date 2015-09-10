@@ -3,7 +3,7 @@
 #include "xll_gsl.h"
 
 using namespace xll;
-
+/*
 static AddInX xai_function_deriv_central(
 	FunctionX(XLL_HANDLEX, _T("?xll_function_deriv_central"), PREFIX _T("FUNCTION.DERIV.CENTRAL"))
 	.Arg(XLL_DOUBLEX, _T("h"), _T("is the step size"))
@@ -25,7 +25,7 @@ static AddInX xai_function_deriv_central(
 	so only 4-points are actually used
 	))
 );
-
+*/
 #ifdef _DEBUG
 XLL_TEST_BEGIN(test_gsl_deriv)
 
