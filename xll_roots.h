@@ -7,28 +7,18 @@
 #include <tuple>
 #include "gsl/gsl_errno.h"
 #include "gsl/gsl_roots.h"
+#include "xll_math.h"
 
 namespace gsl {
 
 namespace root {
-
-	using function = std::function<double(double)>;
 
 	// root bracketing solvers
 	class fsolver {
 		using root_fsolver = std::unique_ptr<gsl_root_fsolver,decltype(&::gsl_root_fsolver_free)>;
 
 		root_fsolver s;
-		function F;
-		gsl_function F_;
-
-		// provide double(*)(double,void*) signature for gsl_function
-		static double static_function(double x, void* params)
-		{
-			const function& f = *static_cast<function*>(params);
-
-			return f(x);
-		}
+		gsl::function f;
 	public:
 		explicit fsolver(const gsl_root_fsolver_type * type)
 			: s{gsl_root_fsolver_alloc(type), &::gsl_root_fsolver_free}
@@ -45,13 +35,11 @@ namespace root {
 			return get();
 		}
 
-		int set(const function& f, double lo, double hi)
+		int set(const std::function<double(double)>& f_, double lo, double hi)
 		{
-			F = f;
-			F_.function = static_function;
-			F_.params = &F;
+			f = f_;
 
-			return gsl_root_fsolver_set(s.get(), &F_, lo, hi);
+			return gsl_root_fsolver_set(s.get(), &f, lo, hi);
 		}
 
 		// forward to gsl_root_fsolver_* functions
@@ -95,35 +83,10 @@ namespace root {
 	// root finding using derivatives
 	class fdfsolver {
 		using root_fdfsolver = std::unique_ptr<gsl_root_fdfsolver,decltype(&::gsl_root_fdfsolver_free)>;
-
 		root_fdfsolver s;
 
 		// function and its derivative
-		using fdfunction = std::tuple<function,function>;
-
-		fdfunction FdF;
-		gsl_function_fdf F_;
-
-		// provide pointers for gsl_function_fdf
-		static double static_f(double x, void* params)
-		{
-			const fdfunction& f = *static_cast<fdfunction*>(params);
-
-			return std::get<0>(f)(x);
-		}
-		static double static_df(double x, void* params)
-		{
-			const fdfunction& f = *static_cast<fdfunction*>(params);
-
-			return std::get<1>(f)(x);
-		}
-		static void static_fdf(double x, void* params, double* fx, double* dfx)
-		{
-			const fdfunction& f = *static_cast<fdfunction*>(params);
-
-			*fx = std::get<0>(f)(x);
-			*dfx = std::get<1>(f)(x);
-		}
+		gsl::function_fdf FdF;
 	public:
 		fdfsolver(const gsl_root_fdfsolver_type * type)
 			: s{gsl_root_fdfsolver_alloc(type),&::gsl_root_fdfsolver_free}
@@ -140,16 +103,11 @@ namespace root {
 			return s.get();
 		}
 
-		int set(const function& f, const function& df, double x0)
+		int set(const std::function<double(double)>& f, const std::function<double(double)>& df, double x0)
 		{
-			FdF = std::make_tuple(f, df);
+			FdF = gsl::function_fdf(f, df);
 
-			F_.f = static_f;
-			F_.df = static_df;
-			F_.fdf = static_fdf;
-			F_.params = &FdF;
-
-			return gsl_root_fdfsolver_set(s.get(), &F_, x0);
+			return gsl_root_fdfsolver_set(s.get(), &FdF, x0);
 		}
 
 		// forward to gsl_root_fdfsolver_* functions
@@ -270,7 +228,10 @@ inline void test_gsl_root_fsolver()
 		gsl::root::fsolver s(gsl_root_fsolver_brent);
 
 		std::vector<double> params{-5,0,1}; // -5 + x^2
-		auto F = [&params](double x) { return gsl_poly_eval(&params[0], static_cast<int>(params.size()), x); };
+		auto F = [params](double x) { return gsl_poly_eval(&params[0], static_cast<int>(params.size()), x); };
+		gsl::function F_(F);
+		assert (F_(0) == -5);
+		assert (F_.call(0) == -5);
 		double x_lo = 0.0, x_hi = 5.0, epsrel = 1e-6;
 		s.set(F, x_lo, x_hi);
 		

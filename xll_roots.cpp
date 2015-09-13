@@ -261,6 +261,7 @@ HANDLEX WINAPI xll_root_fdfsolver_root(HANDLEX h)
 
 XLL_TEST_BEGIN(xll_test_roots)
 
+	test_xll_math();
 	test_gsl_root_fsolver();
 	test_gsl_root_fdfsolver();
 
