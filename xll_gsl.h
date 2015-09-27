@@ -6,7 +6,7 @@
 #pragma once
 #include "gsl/gsl_errno.h"
 #include "gsl/gsl_complex.h"
-#include "../xll8/xll/xll.h"
+#include "xll/xll.h"
 
 #define CATEGORY _T("GSL")
 #define PREFIX CATEGORY _T(".")

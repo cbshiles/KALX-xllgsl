@@ -80,7 +80,7 @@
     <ClCompile Include="xll_deriv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll_ran_gausian.cpp">
+    <ClCompile Include="randist\xll_ran_gausian.cpp">
       <Filter>Source Files\randist</Filter>
     </ClCompile>
   </ItemGroup>
