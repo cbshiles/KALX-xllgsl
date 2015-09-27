@@ -20,9 +20,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xll_complex_math.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll_poly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,8 +77,11 @@
     <ClCompile Include="xll_deriv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="randist\xll_ran_gausian.cpp">
+    <ClCompile Include="randist\xll_ran_gaussian.cpp">
       <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_vector.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -758,6 +758,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_rng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

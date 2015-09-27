@@ -145,8 +145,10 @@ double WINAPI xll_rng_min(HANDLEX rng)
 //!!!uniform_pos
 //!!!uniform_int
 
+#ifdef _DEBUG
 XLL_TEST_BEGIN(xll_rng_test)
 
 gsl_rng_test();
 
 XLL_TEST_END(xll_rng_test)
+#endif // _DEBUG

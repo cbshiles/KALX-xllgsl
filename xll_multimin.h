@@ -5,21 +5,9 @@
 #include <stdexcept>
 #include <vector>
 #include "gsl/gsl_multimin.h"
+#include "xll_vector.h"
 
 namespace gsl {
-
-	gsl_vector make_vector(size_t n, const double* x)
-	{
-		gsl_vector v;
-
-		v.size = n;
-		v.data = const_cast<double*>(x);
-		v.stride = 1;
-		v.owner = false; // so GSL won't mess with the memory, hopefully
-		v.block = 0;
-
-		return v;
-	}
 
 	namespace multimin {
 
@@ -31,7 +19,7 @@ namespace gsl {
 			gsl_multimin_fminimizer* s;
 			function<double> F;
 			gsl_multimin_function F_;
-			gsl_vector x_, dx_;
+			gsl::vector<double> x_, dx_;
 			int status;
 			static double static_function(const gsl_vector* v, void* params)
 			{
@@ -77,8 +65,8 @@ namespace gsl {
 				F_.params = &F;
 				F_.f = static_function;
 
-				x_ = make_vector(n, x);
-				dx_ = make_vector(n, dx);
+				x_ = gsl::vector<double>(n, 1, x);
+				dx_ = gsl::vector<double>(n, 1, dx);
 
 				return status = gsl_multimin_fminimizer_set(s, &F_, &x_, &dx_);
 			}

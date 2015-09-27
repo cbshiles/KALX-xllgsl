@@ -1,4 +1,5 @@
-// xll_rng.h
+// xll_rng.h - Random number generation
+// http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Generation.html#Random-Number-Generation
 #pragma once
 #include <memory> // std::unique_ptr
 #include "gsl/gsl_rng.h"

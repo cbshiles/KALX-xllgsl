@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="randist\xll_ran_gausian.cpp" />
+    <ClCompile Include="randist\xll_ran_gaussian.cpp" />
     <ClCompile Include="specfun\xll_sf_legendre.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -32,10 +32,6 @@
     <ClCompile Include="specfun\xll_sf_zeta.cpp" />
     <ClCompile Include="specfun\xll_sf_airy.cpp" />
     <ClCompile Include="specfun\xll_sf_bessel.cpp" />
-    <ClCompile Include="xll_complex_math.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="xll_deriv.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -52,6 +48,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="xll_vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xll_deriv.h" />
@@ -279,6 +276,7 @@
     <ClInclude Include="xll_rng.h" />
     <ClInclude Include="xll_roots.h" />
     <ClInclude Include="xll_sf.h" />
+    <ClInclude Include="xll_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

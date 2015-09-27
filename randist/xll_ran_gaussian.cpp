@@ -1,7 +1,8 @@
-// xll_ran_gaussian.h
-#include "gsl/gsl_randist.h"
-#include "gsl/gsl_cdf.h"
+// xll_ran_gaussian.cpp - Gaussian variates, density, cumulative distribution, and inverse
+// http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html#The-Gaussian-Distribution
 #include "../xll_rng.h"
+#include "../xll_randist.h"
+//#define EXCEL12
 #include "xll/xll.h"
 
 using namespace xll;
@@ -41,7 +42,7 @@ static AddInX xai_ran_gaussian_pdf(
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Gaussian/normal probability density function."))
 	.Documentation(_T(""))
-	);
+);
 double WINAPI xll_ran_gaussian_pdf(double x, double sigma)
 {
 #pragma XLLEXPORT
@@ -58,7 +59,7 @@ static AddInX xai_cdf_gaussian_P(
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Gaussian/normal cumulative distribution function."))
 	.Documentation(_T(""))
-	);
+);
 double WINAPI xll_cdf_gaussian_P(double x, double sigma)
 {
 #pragma XLLEXPORT
@@ -85,7 +86,7 @@ double WINAPI xll_cdf_gaussian_Pinv(double p, double sigma)
 	return gsl_cdf_gaussian_Pinv(p, sigma);
 }
 
-XLL_TEST_BEGIN(xll_ran_gausian)
+XLL_TEST_BEGIN(xll_ran_gaussian)
 
 double eps = 1e-6;
 
@@ -107,4 +108,4 @@ for (int i = 0; i < sizeof(inv)/sizeof(*inv); ++i) {
 	ensure (fabs(xll_cdf_gaussian_Pinv(p, 1) - inv[i]) < 2*eps);
 }
 
-XLL_TEST_END(xll_ran_gausian)
+XLL_TEST_END(xll_ran_gaussian)

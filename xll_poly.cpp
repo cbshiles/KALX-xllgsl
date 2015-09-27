@@ -38,50 +38,26 @@ xfpx* WINAPI xll_poly_solve_quadratic(double a, double b, double c)
 }
 
 static AddInX xai_poly_eval(
-	FunctionX(XLL_FPX, _T("?xll_poly_eval"), PREFIX _T("POLY.EVAL"))
+	FunctionX(XLL_DOUBLEX, _T("?xll_poly_eval"), PREFIX _T("POLY.EVAL"))
 	.Arg(XLL_FPX, _T("p"), IS_POLY)
-	.Arg(XLL_FPX, _T("x"), _T("is the number at which to evaluate the polynomial "))
+	.Arg(XLL_DOUBLEX, _T("x"), _T("is the number at which to evaluate the polynomial "))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Evaluate the polynomial p(x)."))
 	.Documentation(_T("")
 	)
 );
-xfpx* WINAPI
-xll_poly_eval(const xfp* pa, const xfp* px)
+double WINAPI
+xll_poly_eval(const xfp* pa, double x)
 {
 #pragma XLLEXPORT
-	static fpx_complex p;
-	gsl_complex z = {0, 0};
-
-	// figure out if a is complex data
-	if (pa->columns == 2 && pa->rows > 1) {
-		z.dat[0] = px->array[0];
-		if (size(*px) > 1)
-			z.dat[1] = px->array[1];
-
-		z = gsl_complex_poly_complex_eval((const gsl_complex*)pa->array, size(*pa)/2, z);
-	}
-	else {
-		if (size(*px) > 1) {
-			z.dat[0] = px->array[0];
-			z.dat[1] = px->array[1];			
-			z = gsl_poly_complex_eval(pa->array, size(*pa), z);
-		}
-		else {
-			z.dat[0] = gsl_poly_eval(pa->array, size(*pa), z.dat[0]);
-		}
-	}
-
-	p = z;
-
-	return &p;
+	return gsl_poly_eval(pa->array, size(*pa), x);
 }
 
 // divided differences
 // gsl_poly_dd_init
 // gsl_poly_dd_eval
 // gsl_poly_dd_taylor
-
+/*
 class gsl_poly_complex {
 	gsl_poly_complex_workspace* pw;
 public:
@@ -133,3 +109,4 @@ xll_poly_complex_solve(const xfp* pp)
 
 	return r.get();
 }
+*/
