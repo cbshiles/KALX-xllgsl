@@ -12,8 +12,11 @@
     <Filter Include="include">
       <UniqueIdentifier>{9e7a13d0-30eb-475e-b21d-50925b59e5fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="specfun">
+    <Filter Include="Source Files\specfun">
       <UniqueIdentifier>{e2bfd3a3-1717-4c01-a848-6b7c49d9b484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\randist">
+      <UniqueIdentifier>{d9d4c0bc-b878-4dbd-8d23-d41c67bf58e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,46 +39,49 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_airy.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="xll_roots.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_bessel.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="xll_function.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_zeta.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_dawson.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_debye.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_erf.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_expint.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_laguerre.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_lambert.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="xll_multimin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="specfun\xll_sf_legendre.cpp">
-      <Filter>specfun</Filter>
+      <Filter>Source Files\specfun</Filter>
     </ClCompile>
     <ClCompile Include="xll_deriv.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_ran_gausian.cpp">
+      <Filter>Source Files\randist</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -746,6 +752,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_deriv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_randist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_rng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

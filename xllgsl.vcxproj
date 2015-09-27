@@ -42,6 +42,7 @@
     <ClCompile Include="xll_gsl.cpp" />
     <ClCompile Include="xll_multimin.cpp" />
     <ClCompile Include="xll_poly.cpp" />
+    <ClCompile Include="xll_ran_gausian.cpp" />
     <ClCompile Include="xll_rng.cpp" />
     <ClCompile Include="xll_roots.cpp" />
     <ClCompile Include="xll_sf.cpp" />
@@ -274,6 +275,8 @@
     <ClInclude Include="include\gsl\gsl_wavelet2d.h" />
     <ClInclude Include="xll_math.h" />
     <ClInclude Include="xll_multimin.h" />
+    <ClInclude Include="xll_randist.h" />
+    <ClInclude Include="xll_rng.h" />
     <ClInclude Include="xll_roots.h" />
     <ClInclude Include="xll_sf.h" />
   </ItemGroup>
@@ -351,7 +354,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProgramFiles)\KALX\xll\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <AdditionalOptions> /J</AdditionalOptions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -398,7 +401,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProgramFiles)\KALX\xll\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <AdditionalOptions> /J</AdditionalOptions>
       <DebugInformationFormat>

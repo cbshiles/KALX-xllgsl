@@ -1,4 +1,4 @@
-// xll_math.h
+// xll_math.h - wrappers for gsl_math.h to make value-type functions usable in the GSL
 #pragma once
 #include <functional>
 #include "gsl/gsl_math.h"
@@ -6,8 +6,13 @@
 namespace gsl {
 
 	class function {
+		// the GSL struct
 		gsl_function _f;
+
+		// the corresponding C++ object is the void* parameter
 		std::function<double(double)> f;
+
+		// the function pointer needed by GSL
 		static double static_function(double x, void* params)
 		{
 			const std::function<double(double)>& f = *static_cast<std::function<double(double)>*>(params);
@@ -42,13 +47,14 @@ namespace gsl {
 		~function()
 		{ }
 
-		double operator()(double x) const
-		{
-			return f(x);
-		}
+		// for GSL interoperability
 		gsl_function* operator&()
 		{
 			return &_f;
+		}
+		double operator()(double x) const
+		{
+			return f(x);
 		}
 		double call(double x)
 		{
