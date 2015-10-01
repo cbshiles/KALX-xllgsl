@@ -57,5 +57,25 @@ WORD WINAPI xll_ran_discrete(HANDLEX rng, HANDLEX discrete)
 	return k;
 }
 
-//!!! static AddInX xai_ran_discrete_pdf(...
-//!!! implement gsl_ran_discrete_pdf(...
+static AddInX xai_ran_discrete_pdf(
+	FunctionX(XLL_DOUBLEX, _T("?xll_ran_discrete_pdf"), _T("GSL.RAN.DISCRETE.PDF"))
+	.Arg(XLL_WORDX, _T("k"), _T("is a non-negative integer."))
+	.Arg(XLL_HANDLEX, _T("Disc"), _T("is a handle returned by GSL.RAN.DISCRETE.PREPROC"))
+	.Category(_T("GSL"))
+	.FunctionHelp(_T("Return discrete pdf."))
+	);
+double WINAPI xll_ran_discrete_pdf(WORD k, HANDLEX disc)
+{
+#pragma XLLEXPORT
+	handle<gsl::ran_discrete> d(disc);
+
+	return gsl_ran_discrete_pdf(k, *d);
+}
+
+/*
+XLL_TEST_BEGIN(xll_rand_discrete)
+std::vector<double> p{0.1,0.2,0.3};
+gsl::ran_discrete d(p.size(), p.data());
+size_t k;
+XLL_TEST_END(xll_rand_discrete)
+*/
