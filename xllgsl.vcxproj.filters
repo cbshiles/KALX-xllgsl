@@ -83,6 +83,9 @@
     <ClCompile Include="xll_vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="randist\xll_ran_discrete.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -761,6 +764,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="randist\xll_ran_discrete.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

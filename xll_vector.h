@@ -1,6 +1,7 @@
 // xll_vector.h - GSL vector classes
 // http://www.gnu.org/software/gsl/manual/html_node/Vectors.html#Vectors
 #pragma once
+#include <vector>
 //#define HAVE_INLINE
 #include "gsl/gsl_vector.h"
 
@@ -80,6 +81,12 @@ namespace gsl {
 			for (size_t i = 0; i < v.size(); ++i)
 				operator[](i) = v[i];
 		}
+		vector(const std::vector<X>& v)
+			: pv(vector_traits<X>::alloc(v.size()))
+		{
+			for (size_t i = 0; i < v.size(); ++i)
+				operator[](i) = v[i];
+		}
 		vector& operator=(const vector& v)
 		{
 			if (this != &v) {
@@ -113,6 +120,11 @@ namespace gsl {
 		{
 			return pv->owner != 0;
 		}
+		// does not take into account stride
+		const X* data() const
+		{
+			return pv->data;
+		}
 
 		X operator[](size_t i) const
 		{
@@ -128,12 +140,13 @@ namespace gsl {
 
 #ifdef _DEBUG
 #include <cassert>
+#include <algorithm>
 
 template<class X>
 inline void gsl_test_vector()
 {
 	{
-		gsl::vector<double> v(10);
+		gsl::vector<X> v(10);
 		assert (v.size() == 10);
 		assert (v.stride() == 1);
 		assert (v.owner());
@@ -147,6 +160,12 @@ inline void gsl_test_vector()
 		assert (v.size() == 10);
 		assert (v.stride() == 1);
 		assert (v.owner());
+	}
+	{
+		std::vector<X> v{1,2,3};
+		gsl::vector<X> w(v);
+		assert (w.size() == v.size());
+//		assert (std::equal(v.begin(), v.end(), w.be
 	}
 }
 

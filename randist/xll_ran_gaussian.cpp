@@ -11,6 +11,7 @@ static AddInX xai_ran_gaussian(
 	FunctionX(XLL_DOUBLEX, _T("?xll_ran_gaussian"), _T("GSL.RAN.GAUSSIAN"))
 	.Arg(XLL_HANDLEX, _T("rng"), _T("is a handle returned by GSL.RNG."))
 	.Arg(XLL_DOUBLEX, _T("sigma"), _T("is the standard deviation of the Gaussian. Default is 1"), 1.0)
+	.Volatile()
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Gaussian/normal random deviates using a random number generator."))
 	.Documentation(_T(""))

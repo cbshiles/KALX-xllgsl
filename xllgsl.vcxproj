@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="randist\xll_ran_discrete.cpp" />
     <ClCompile Include="randist\xll_ran_gaussian.cpp" />
     <ClCompile Include="specfun\xll_sf_legendre.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -51,6 +52,7 @@
     <ClCompile Include="xll_vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="randist\xll_ran_discrete.h" />
     <ClInclude Include="xll_deriv.h" />
     <ClInclude Include="xll_gsl.h" />
     <ClInclude Include="include\gsl\gsl_blas.h" />

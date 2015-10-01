@@ -187,6 +187,8 @@ HANDLEX WINAPI xll_sumsq()
 
 	return h;
 }
+#endif // _DEBUG
+#ifdef _DEBUG
 
 XLL_TEST_BEGIN(xll_multimin_fmininimizer)
 
