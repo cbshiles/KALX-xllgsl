@@ -14,14 +14,14 @@ inline double udf(double regid, double x)
 }
 
 static AddInX xai_function_call(
-	FunctionX(XLL_DOUBLEX, _T("?xll_function_call"), _T("XLL.FUNCTION.CALL"))
+	FunctionX(XLL_DOUBLEX, _T("?xll_std_function_call"), _T("XLL.FUNCTION.CALL"))
 	.Arg(XLL_HANDLEX, _T("f"), _T("is the handle of a std::function<double(double)>."))
 	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number."))
 	.Category(_T("XLL"))
 	.FunctionHelp(_T("Returns f(x)."))
 	.Documentation(_T(""))
 );
-double WINAPI xll_function_call(HANDLEX f, double x)
+double WINAPI xll_std_function_call(HANDLEX f, double x)
 {
 #pragma XLLEXPORT
 	handlex y;
@@ -65,4 +65,15 @@ HANDLEX WINAPI xll_function_regid(double regid)
 	}
 
 	return h;
+}
+
+static AddInX xai_foo(
+	FunctionX(XLL_DOUBLEX, _T("?xll_foo"), _T("XLL.FOO"))
+	.Arg(XLL_DOUBLEX, _T("x"), _T("arg"))
+	);
+double WINAPI xll_foo(double x)
+{
+#pragma XLLEXPORT
+
+	return x*x - 5;
 }

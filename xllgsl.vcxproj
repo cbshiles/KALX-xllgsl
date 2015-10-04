@@ -33,6 +33,7 @@
     <ClCompile Include="specfun\xll_sf_zeta.cpp" />
     <ClCompile Include="specfun\xll_sf_airy.cpp" />
     <ClCompile Include="specfun\xll_sf_bessel.cpp" />
+    <ClCompile Include="xll_black.cpp" />
     <ClCompile Include="xll_deriv.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
