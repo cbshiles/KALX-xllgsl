@@ -5,5 +5,5 @@ This add-in library calls functions from the
 
 It uses libraries built from David Geldreich's VC++ port available at: 
 http://david.geldreich.free.fr/dev.html
-!!!Update to lates!!!
+!!!Update to latest!!!
 

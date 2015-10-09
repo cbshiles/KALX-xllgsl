@@ -158,7 +158,7 @@ struct quadratic_params {
 };
 
 // This is bad. Why???
-double quadratic(double x, void *params)
+inline double quadratic(double x, void *params)
 {
 	struct quadratic_params *p 
 		= (struct quadratic_params *) params;
@@ -170,7 +170,7 @@ double quadratic(double x, void *params)
 	return (a * x + b) * x + c;
 }
 
-double quadratic_deriv(double x, void *params)
+inline double quadratic_deriv(double x, void *params)
 {
 	struct quadratic_params *p 
 		= (struct quadratic_params *) params;
@@ -182,7 +182,7 @@ double quadratic_deriv(double x, void *params)
 	return 2.0 * a * x + b;
 }
 
-void quadratic_fdf(double x, void *params, double *y, double *dy)
+inline void quadratic_fdf(double x, void *params, double *y, double *dy)
 {
 	struct quadratic_params *p 
 		= (struct quadratic_params *) params;

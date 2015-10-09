@@ -1,6 +1,7 @@
 // xll_black.cpp - Black forward model
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include "xll_roots.h"
 #include "xll/xll.h"
 
 using namespace xll;
@@ -45,6 +46,9 @@ static AddInX xai_black_put_value(
 	.Num(_T("sigma"), _T("vol"), .2)
 	.Num(_T("k"), _T("strike"), 100)
 	.Num(_T("t"), _T("expiration"), .25)
+	.FunctionHelp(_T("Return Black put value."))
+	.Category(_T("BSM"))
+	.Documentation()
 );
 double WINAPI xll_black_put_value(double f, double sigma, double k, double t)
 {
@@ -98,14 +102,28 @@ double WINAPI xll_black_vega(double f, double sigma, double k, double t)
 }
 
 //!!! implement the following using gsl::fdfsolver
+// Return the volatility that gives put value p.
 inline double black_put_implied_volatility(double f, double p, double k, double t)
 {
 	ensure (f >= 0);
-	ensure (p >= k - f);
+	ensure (p >= k - f && p >= 0);
 	ensure (k > 0);
-	ensure (t > 0)
+	ensure (t > 0);
+
+	gsl::root::fdfsolver s(gsl_root_fdfsolver_newton);
 	
-	return 0;
+	auto F = [f,p,k,t](double sigma) { 
+		return -p + black_put_value(f, sigma, k, t); 
+	};
+	auto dF = [f,k,t](double sigma) { 
+		return black_vega(f, sigma, k, t); 
+	};
+	double sigma = 0.3, epsrel = 1e-6;
+	s.set(F, dF, sigma);
+
+	sigma = s.solve(gsl::root::test_delta(0, epsrel));
+
+	return sigma;
 }
 static AddInX xai_black_put_implied_volatility(
 	FunctionX(XLL_DOUBLEX, _T("?xll_black_put_implied_volatility"), _T("BLACK.PUT.IMPLIED.VOLATILTIY"))

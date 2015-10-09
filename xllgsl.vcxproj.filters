@@ -14,7 +14,7 @@
     <Filter Include="Source Files\randist">
       <UniqueIdentifier>{d9d4c0bc-b878-4dbd-8d23-d41c67bf58e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\randist\Header Files">
+    <Filter Include="Header Files">
       <UniqueIdentifier>{2b8ebbaa-c43f-4477-946c-d7235482d81d}</UniqueIdentifier>
       <Extensions>h</Extensions>
     </Filter>
@@ -87,6 +87,12 @@
       <Filter>Source Files\randist</Filter>
     </ClCompile>
     <ClCompile Include="xll_black.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\xllfunction\xllbind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\xllfunction\xllcall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -743,34 +749,34 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="xll_gsl.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_sf.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_math.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_roots.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_multimin.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_deriv.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_randist.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_rng.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_vector.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="randist\xll_ran_discrete.h">
-      <Filter>Source Files\randist\Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
