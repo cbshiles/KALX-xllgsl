@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\xllfunction\xllbind.cpp" />
     <ClCompile Include="..\xllfunction\xllcall.cpp" />
+    <ClCompile Include="..\xllfunction\xllfunction.cpp" />
     <ClCompile Include="randist\xll_ran_discrete.cpp" />
     <ClCompile Include="randist\xll_ran_gaussian.cpp" />
     <ClCompile Include="specfun\xll_sf_legendre.cpp">

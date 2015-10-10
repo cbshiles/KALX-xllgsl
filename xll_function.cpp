@@ -45,7 +45,7 @@ static AddInX xai_function_regid(
 	.Arg(XLL_HANDLEX, _T("Regid"), _T("is the register id of functions taking a number and returning a number."))
 	.Uncalced()
 	.Category(_T("XLL"))
-	.FunctionHelp(_T("Create a std::function<double(double)> handle."))
+	.FunctionHelp(_T("Return a std::function<double(double)> handle."))
 	.Documentation(_T(""))
 );
 HANDLEX WINAPI xll_function_regid(double regid)
