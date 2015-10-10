@@ -285,7 +285,9 @@
     <ClInclude Include="xll_vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CorMil1993.pdf" />
     <None Include="README.md" />
+    <None Include="SOLVEkey.pdf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xll8\xll.vcxproj">

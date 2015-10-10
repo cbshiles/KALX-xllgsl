@@ -787,5 +787,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="SOLVEkey.pdf" />
+    <None Include="CorMil1993.pdf" />
   </ItemGroup>
 </Project>

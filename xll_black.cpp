@@ -131,7 +131,7 @@ double WINAPI xll_black_vega(double f, double sigma, double k, double t)
 	return v;
 }
 
-//!!!Implement Corrado-Miller formula (10) from http://...
+//!!!Implement Corrado-Miller formula (10) from CorMil1993.pdf
 // Use r = b = 0.
 inline double corrado_miller(double f, double k, double t)
 {
