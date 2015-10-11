@@ -101,6 +101,108 @@
     <ClCompile Include="..\xllfunction\xllfunction.cpp">
       <Filter>Source Files\xllfunction</Filter>
     </ClCompile>
+    <ClCompile Include="xll_njr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_bernoulli.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_beta.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_binomial.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_bivariate_gaussian.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_cauchy.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_chisq.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_dirichlet.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_exponential.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_exppow.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_fdist.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_flat.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_gamma.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_gaussian_tail.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_geometric.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_gumbel1.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_gumbel2.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_hypergeometric.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_landau.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_laplace.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_levy.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_levy_skew.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_logarithmic.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_logistic.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_lognormal.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_multinomial.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_negative_binomial.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_pareto.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_pascal.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_poisson.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_rayleigh.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_rayleigh_tail.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_t_distribution.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
+    <ClCompile Include="randist\xll_ran_weibull.cpp">
+      <Filter>Source Files\randist</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -782,6 +884,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="randist\xll_ran_discrete.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_njr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

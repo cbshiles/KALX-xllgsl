@@ -22,8 +22,41 @@
     <ClCompile Include="..\xllfunction\xllbind.cpp" />
     <ClCompile Include="..\xllfunction\xllcall.cpp" />
     <ClCompile Include="..\xllfunction\xllfunction.cpp" />
+    <ClCompile Include="randist\xll_ran_bernoulli.cpp" />
+    <ClCompile Include="randist\xll_ran_beta.cpp" />
+    <ClCompile Include="randist\xll_ran_binomial.cpp" />
+    <ClCompile Include="randist\xll_ran_bivariate_gaussian.cpp" />
+    <ClCompile Include="randist\xll_ran_cauchy.cpp" />
+    <ClCompile Include="randist\xll_ran_chisq.cpp" />
+    <ClCompile Include="randist\xll_ran_dirichlet.cpp" />
     <ClCompile Include="randist\xll_ran_discrete.cpp" />
+    <ClCompile Include="randist\xll_ran_exponential.cpp" />
+    <ClCompile Include="randist\xll_ran_exppow.cpp" />
+    <ClCompile Include="randist\xll_ran_fdist.cpp" />
+    <ClCompile Include="randist\xll_ran_flat.cpp" />
+    <ClCompile Include="randist\xll_ran_gamma.cpp" />
     <ClCompile Include="randist\xll_ran_gaussian.cpp" />
+    <ClCompile Include="randist\xll_ran_gaussian_tail.cpp" />
+    <ClCompile Include="randist\xll_ran_geometric.cpp" />
+    <ClCompile Include="randist\xll_ran_gumbel1.cpp" />
+    <ClCompile Include="randist\xll_ran_gumbel2.cpp" />
+    <ClCompile Include="randist\xll_ran_hypergeometric.cpp" />
+    <ClCompile Include="randist\xll_ran_landau.cpp" />
+    <ClCompile Include="randist\xll_ran_laplace.cpp" />
+    <ClCompile Include="randist\xll_ran_levy.cpp" />
+    <ClCompile Include="randist\xll_ran_levy_skew.cpp" />
+    <ClCompile Include="randist\xll_ran_logarithmic.cpp" />
+    <ClCompile Include="randist\xll_ran_logistic.cpp" />
+    <ClCompile Include="randist\xll_ran_lognormal.cpp" />
+    <ClCompile Include="randist\xll_ran_multinomial.cpp" />
+    <ClCompile Include="randist\xll_ran_negative_binomial.cpp" />
+    <ClCompile Include="randist\xll_ran_pareto.cpp" />
+    <ClCompile Include="randist\xll_ran_pascal.cpp" />
+    <ClCompile Include="randist\xll_ran_poisson.cpp" />
+    <ClCompile Include="randist\xll_ran_rayleigh.cpp" />
+    <ClCompile Include="randist\xll_ran_rayleigh_tail.cpp" />
+    <ClCompile Include="randist\xll_ran_t_distribution.cpp" />
+    <ClCompile Include="randist\xll_ran_weibull.cpp" />
     <ClCompile Include="specfun\xll_sf_legendre.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -43,6 +76,7 @@
     <ClCompile Include="xll_function.cpp" />
     <ClCompile Include="xll_gsl.cpp" />
     <ClCompile Include="xll_multimin.cpp" />
+    <ClCompile Include="xll_njr.cpp" />
     <ClCompile Include="xll_poly.cpp" />
     <ClCompile Include="xll_rng.cpp" />
     <ClCompile Include="xll_roots.cpp" />
@@ -278,6 +312,7 @@
     <ClInclude Include="include\gsl\gsl_wavelet2d.h" />
     <ClInclude Include="xll_math.h" />
     <ClInclude Include="xll_multimin.h" />
+    <ClInclude Include="xll_njr.h" />
     <ClInclude Include="xll_randist.h" />
     <ClInclude Include="xll_rng.h" />
     <ClInclude Include="xll_roots.h" />
