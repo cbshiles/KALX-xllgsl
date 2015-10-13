@@ -2,27 +2,29 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <iterator>
 
 namespace njr {
 
 // H_{n+1}(x) = x H_n(x) - n H_{n-1}(x)
-inline double hermite_recursive(size_t n, double x)
+inline double Hermite_recursive(size_t n, double x)
 {
 	if (n == 0)
 		return 1;
 	if (n == 1)
 		return x;
 
-	return x*hermite_recursive(n-1, x) - (n - 1)*hermite_recursive(n - 2, x);
+	return x*Hermite_recursive(n-1, x) - (n - 1)*Hermite_recursive(n - 2, x);
 }
-inline double hermite(size_t n, double x)
+
+inline double Hermite_loop(size_t n, double x)
 {
 	if (n == 0)
 		return 1;
 	if (n == 1)
 		return x;
 
-	double h0 = 1, h1 = x, hi;
+	double h0 = 1, h1 = x, hi = 0;
 	for (size_t i = 2; i <= n; ++i) {
 		hi = x*h1 - (i - 1)*h0; // h2 = x h1 - 1 h0
 		h0 = h1;
@@ -31,7 +33,46 @@ inline double hermite(size_t n, double x)
 
 	return hi;
 }
-	
+
+template<class X = double>
+class Hermite : public std::iterator<std::input_iterator_tag, X> {
+	size_t n;
+	X x, h, h_;
+public:
+	Hermite(const X& x = 0)
+		: n(0), x(x), h(1), h_(0)
+	{ }
+	X operator*() const
+	{
+		return h;
+	}
+	Hermite& operator++()
+	{
+		X _h = x*h - n*h_;
+		h_ = h;
+		h = _h;
+		++n;
+
+		return *this;
+	}
+	Hermite operator++(int)
+	{
+		auto _h(*this);
+
+		operator++();
+
+		return _h;
+	}
+	bool operator==(const Hermite& H) const
+	{
+		return n == H.n && x == H.x && h == H.h && h_ == H.h_;
+	}
+	bool operator!=(const Hermite& H) const
+	{
+		return !operator==(H);
+	}
+};
+
 // erf(x) = int_0^x exp(-t^2) dt 2/sqrt(pi)
 // N(x) = int_-infty^x exp(-t^2/2) dt/sqrt(2pi)
 inline double std_normal_cdf(double x)
@@ -58,7 +99,7 @@ inline double std_normal_ndf(size_t n, double x)
 	if (n == 1)
 		return std_normal_pdf(x);
 
-	return (n&1 ? 1 : -1)*hermite(n - 1, x)*exp(-x*x/2)/M_SQRT2PI;
+	return (n&1 ? 1 : -1)*Hermite_loop(n - 1, x)*exp(-x*x/2)/M_SQRT2PI;
 }
 
 
@@ -74,10 +115,29 @@ inline void test_njr_hermite(size_t N = 10000, size_t O = 10)
 	std::default_random_engine e;
 	std::uniform_real_distribution<> u;
 
-	for (size_t i = 0; i < 0; ++i) {
+	{
+		for (size_t i = 0; i < O; ++i) {
+			for (size_t n = 0; n < N; ++n) {
+				double x = 1/u(e) - 1/u(e);
+				assert (njr::Hermite_recursive(i, x) == njr::Hermite_loop(i, x));
+			}
+		}
+	}
+	{
+		njr::Hermite<> H;
+		auto H1(H);
+		assert (H1 == H);
+		assert (!(H1 != H));
+		H = H1;
+		assert (H1 == H);
+		assert (!(H1 != H));
+
 		for (size_t n = 0; n < N; ++n) {
 			double x = 1/u(e) - 1/u(e);
-			assert (njr::hermite_recursive(i, x) == njr::hermite(i, x));
+			auto H_ = njr::Hermite<>(x);
+			for (size_t i = 0; i < O; ++i) {
+				assert (*H_++ == njr::Hermite_loop(i, x));
+			}
 		}
 	}
 }

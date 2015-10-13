@@ -18,9 +18,6 @@
       <UniqueIdentifier>{2b8ebbaa-c43f-4477-946c-d7235482d81d}</UniqueIdentifier>
       <Extensions>h</Extensions>
     </Filter>
-    <Filter Include="Source Files\xllfunction">
-      <UniqueIdentifier>{dd472bab-403d-4ffa-883d-39c1598db520}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll_poly.cpp">
@@ -91,15 +88,6 @@
     </ClCompile>
     <ClCompile Include="xll_black.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\xllfunction\xllbind.cpp">
-      <Filter>Source Files\xllfunction</Filter>
-    </ClCompile>
-    <ClCompile Include="..\xllfunction\xllcall.cpp">
-      <Filter>Source Files\xllfunction</Filter>
-    </ClCompile>
-    <ClCompile Include="..\xllfunction\xllfunction.cpp">
-      <Filter>Source Files\xllfunction</Filter>
     </ClCompile>
     <ClCompile Include="xll_njr.cpp">
       <Filter>Source Files</Filter>

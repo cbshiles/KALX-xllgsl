@@ -19,9 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\xllfunction\xllbind.cpp" />
-    <ClCompile Include="..\xllfunction\xllcall.cpp" />
-    <ClCompile Include="..\xllfunction\xllfunction.cpp" />
     <ClCompile Include="randist\xll_ran_bernoulli.cpp" />
     <ClCompile Include="randist\xll_ran_beta.cpp" />
     <ClCompile Include="randist\xll_ran_binomial.cpp" />
