@@ -72,11 +72,11 @@ double WINAPI xll_black_put_value(double f, double sigma, double k, double t)
 
 /*****************************************************************************
 The Black-Scholes/Merton pricing formula gives the present value of an option.
-The put value is exp(-rt)Emax{k - S, 0} where S = Fexp(-rt).
+The put value is exp(-rt)Emax{k - S, 0} 
+where S = s exp((r - sigma^/2)t + sigma B_t = exp(rt) F.
 *****************************************************************************/
 //!!! implement this using black_put_value
-template<class F, class S, class K, class T>
-inline double bms_put_value(F f, S sigma, K k, T t)
+inline double bms_put_value(double r, double s, double sigma, double k, double t)
 {
 	return 0;
 }
