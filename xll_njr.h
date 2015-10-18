@@ -1,8 +1,10 @@
 // xll_njr.h - Normal Jarrow-Rudd model
 #pragma once
 #define _USE_MATH_DEFINES
+#include <cassert>
+#define ensure(x) assert(x)
 #include <cmath>
-#include <iterator>
+#include <vector>
 
 namespace njr {
 
@@ -90,7 +92,7 @@ inline double std_normal_pdf(double x)
 // H_n(x) = x H_{n-1}(x) - (n - 1) H_{n-2}(x), are the Hermite polynomials
 // N^(n)(x) = (d/dx)^{n-1} exp(-x^2/2)/sqrt(2pi) 
 //          = (-1)^{n-1} exp(-x^2/2) H_{n-1}/sqrt(2pi)
-inline double std_normal_ndf(size_t n, double x)
+inline double std_normal_ddf(size_t n, double x)
 {
 	static double M_SQRT2PI = sqrt(2*M_PI);
 
@@ -102,8 +104,132 @@ inline double std_normal_ndf(size_t n, double x)
 	return (n&1 ? 1 : -1)*Hermite_loop(n - 1, x)*exp(-x*x/2)/M_SQRT2PI;
 }
 
+// Bell polynomials
+// B_{n+1}(x_1,...,x_{n+1}) = sum_k=0^n C(n,k) B_{n-k)(x_1,...,x_{n-k}) x_{k+1}
+// B_n(x_0,...,x{n-1}) = sum_k=0^{n-1} C(n-1,k) B_{n-1-k}(x_0,...,x_{n-2-k}) x_k
+inline double Bell_(size_t n, const double* B, size_t m, const double* x)
+{
+	ensure (n > 0);
+	ensure (m > 0);
 
-} // njr
+	double Cnk = 1;
+	double Bn = Cnk*B[n-1]*x[0];
+	for (size_t k = 1; k < n && k < m; ++k) {
+		Cnk *= (n - k);
+		Cnk /= k;
+		Bn += Cnk*B[n - 1 - k]*x[k];
+	}
+
+	return Bn;
+}
+// fill B[0], ..., B[n-1] to preallocated memory
+inline void Bell(size_t m, const double* x, size_t n, double* B)
+{
+	ensure (n > 0);
+	
+	B[0] = 1;
+	for (size_t k = 1; k < n; ++k) {
+		B[k] = Bell_(k, B, m, x);
+	}
+
+} 
+
+// Reduced Bell polynomials b_n = B_n/n!
+// n! b_n = sum_{k=0}^{n-1} C(n-1,k) (n-1-k)! b_{n-1-k} x_k
+// C(n-1,k)(n-1-k)!/n! = (n-1)!/k!n! = 1/n k!
+inline double bell_(size_t n, const double* b, size_t m, const double* x)
+{
+	ensure (n > 0);
+	ensure (m > 0);
+
+	double k_ = 1; // 1/k!
+	double bn = k_*b[n-1]*x[0];
+	for (size_t k = 1; k < n && k < m; ++k) {
+		k_ /= k;
+		bn += k_*b[n - 1 - k]*x[k];
+	}
+
+	return bn/n;
+}
+// fill b[0], ..., b[n-1] to preallocated memory
+inline void bell(size_t m, const double* x, size_t n, double* b)
+{
+	ensure (n > 0);
+
+	b[0] = 1;
+	for (size_t k = 1; k < n; ++k) {
+		b[k] = bell_(k, b, m, x);
+	}
+
+} 
+
+// Esscher transformed cumulants.
+// kappa*_n = sum_{j=0}^n kappa_{n+j} s^j/j!
+inline void kappa_(double s, size_t n, const double* k, size_t n_, double* k_)
+{
+	for (size_t i = 0; i < n && i < n_; ++i) {
+		k_[i] = k[i];
+		double sj = s; // s^j
+		for (size_t j = 1; i + j < n; ++j) {
+			k_[i] += k[i + j]*sj/j;
+			sj *= s;
+		}
+	}
+	for (size_t i = n; i < n_; ++i)
+		k_[i] = 0;
+}
+
+// P(X <= x) where kappa are perturbations from normal cumulants
+// G(x) = sum_{n>=0} (-1)^n B_n(k[0],...,k[n-1]) F^(n)(x)/n!
+inline double cdf(double x, size_t n, const double* kappa)
+{
+	double G = std_normal_ddf(0, x);
+	std::vector<double> b{1}; // b_0 = 1
+	
+	b.reserve(30);
+	for (size_t i = 1; i < 30; ++i) {
+		double bi = bell_(i, b.data(), n, kappa);
+		G += (i&1 ? -1 : 1) * bi*std_normal_ddf(i, x);
+		b.push_back(bi);
+	}
+
+	return G;
+}
+
+// F = f exp(-kappa(s) + s X)
+// p = E(k - F)^+ = k P(X < z) = f P^*(X < z)
+// z = (log(k/f) + kappa(s))/s <=> F = k
+template<class X = double>
+inline X put_value(X f, X sigma, X k, X t, size_t n = 0, X *kappa = nullptr)
+{
+	ensure (f > 0);
+	ensure (sigma > 0);
+	ensure (k > 0);
+	ensure (t > 0);
+
+	X s = sigma*sqrt(t);
+	X kappa_s = s*s/2; // standard normal kappa(s)
+	X si = s;
+	for (size_t i = 1; i <= n; ++i)
+	{
+		kappa_s += kappa[i]*si/i;
+		si *= s;
+	}
+
+	X z = (log(k/f) + kappa_s)/s;
+	X P = cdf(z, n, kappa);
+
+	std::vector<X> kappa_(kappa, kappa + n);
+	kappa_[1] += 1; // std normal
+	kappa_.resize(2*n);
+	njr::kappa_(s, n, &kappa_[0], 2*n, &kappa_[0]);
+	kappa_[1] -= 1; 
+	X P_ = cdf(z, n, &kappa_[0]);
+
+	return k*P - f*P_;
+}
+
+}// njr
 
 #ifdef _DEBUG
 #include <cassert>
@@ -140,6 +266,16 @@ inline void test_njr_hermite(size_t N = 10000, size_t O = 10)
 			}
 		}
 	}
+}
+
+inline void test_njr_bell()
+{
+	std::vector<double> B(6), x = {1,1,1,1,1,1};
+	njr::Bell(x.size(), x.data(), B.size(), &B[0]);
+	// http://www.wolframalpha.com/input/?i=Table%5BBellB%5Bn%5D%2C+%7Bn%2C0%2C5%7D%5D
+	double BellB[] = {1, 1, 2, 5, 15, 52};
+	for (size_t i = 0; i < sizeof(BellB)/sizeof(*BellB); ++i)
+		ensure (B[i] == BellB[i]);
 }
 
 #endif // _DEBUG

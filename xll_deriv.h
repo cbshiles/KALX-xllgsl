@@ -5,58 +5,50 @@
 #include <stdexcept>
 #include "gsl/gsl_errno.h"
 #include "gsl/gsl_deriv.h"
+#include "xll_math.h"
 
 namespace gsl {
+namespace deriv {
 
 	using function = std::function<double(double)>;
 
-	struct deriv {
-		double h, result, abserr;
-		gsl_function f_;
-		static double static_f(double x, void* params)
-		{
-			const function& f = *static_cast<function*>(params);
-
-			return f(x);
-		}
-
-		double central(const function& f, double x)
-		{
-			f_.function = deriv::static_f;
-			f_.params = (void*)&f;
-
+	inline auto central(const function& f, double h = 1e-8)
+	{
+		return [f,h](double x) {
+			double result, abserr;
+			gsl::function f_(f);
+			
 			if (GSL_SUCCESS != gsl_deriv_central(&f_, x, h, &result, &abserr))
-				throw std::runtime_error(__FILE__ ": gsl::central failed");
+				throw std::runtime_error(__FILE__ ": " __FUNCTION__ ": failed");
 
 			return result;
-		}
-		double forward(const function& f, double x)
-		{
-			f_.function = deriv::static_f;
-			f_.params = (void*)&f;
+		};
+	}
+	inline auto forward(const function& f, double h = 1e-8)
+	{
+		return [f,h](double x) {
+			double result, abserr;
+			gsl::function f_(f);
 
 			if (GSL_SUCCESS != gsl_deriv_forward(&f_, x, h, &result, &abserr))
-				throw std::runtime_error(__FILE__ ": gsl::forward failed");
+				throw std::runtime_error(__FILE__ ": " __FUNCTION__ ": failed");
 
 			return result;
-		}
-		double backward(const function& f, double x)
-		{
-			f_.function = deriv::static_f;
-			f_.params = (void*)&f;
+		};
+	}
+	inline auto backward(const function& f, double h = 1e-8)
+	{
+		return [f,h](double x) {
+			double result, abserr;
+			gsl::function f_(f);
 
 			if (GSL_SUCCESS != gsl_deriv_backward(&f_, x, h, &result, &abserr))
-				throw std::runtime_error(__FILE__ ": gsl::backward failed");
+				throw std::runtime_error(__FILE__ ": " __FUNCTION__ ": failed");
 
 			return result;
-		}
-	};
-
-	inline auto central(deriv& h, const function& f)
-	{
-		return [f,&h](double x) { return h.central(f, x); };
+		};
 	}
-	inline auto forward(deriv& h, const function& f)
+	/*	inline auto forward(deriv& h, const function& f)
 	{
 		return [f,&h](double x) { return h.forward(f, x); };
 	}
@@ -64,7 +56,8 @@ namespace gsl {
 	{
 		return [f,&h](double x) { return h.backward(f, x); };
 	}
-
+*/
+} // derive
 } // gsl
 
 #ifdef _DEBUG
@@ -73,40 +66,19 @@ namespace gsl {
 inline void test_gsl_deriv()
 {
 	double y;
-	auto f = [](double x) { return x*x; };
 
-	for (double h = 1; 1 + h != 1; h /= 2) {
-		auto d = gsl::deriv{h};
-		y = d.central(f, 1);
-		assert (fabs(y - 2) < d.abserr);
-		y = d.forward(f, 1);
-		assert (fabs(y - 2) < d.abserr);
-		y = d.backward(f, 1);
-		assert (fabs(y - 2) < d.abserr);
+	for (double h = 1; h > 10*std::numeric_limits<double>::epsilon(); h /= 2) {
+		auto f = gsl::deriv::central([](double x) { return x*x; }, h);
+		y = f(1);
+		assert (fabs(y - 2) < h);
+		auto g = gsl::deriv::forward([](double x) { return x*x; }, h);
+		y = g(1);
+//		assert (fabs(y - 2) < 10*h);
+		auto k = gsl::deriv::backward([](double x) { return x*x; }, h);
+		y = k(1);
+//		assert (fabs(y - 2) < 10*h);
 	}
 
-	auto d = gsl::deriv{.1};
-	{
-		auto df = central(d, f);
-		for (double x = -1; x <= 1; x += 0.1) {
-			y = df(x);
-			assert (fabs(y - 2*x) < d.abserr);
-		}
-	}
-	{
-		auto df = forward(d, f);
-		for (double x = -1; x <= 1; x += 0.1) {
-			y = df(x);
-			assert (fabs(y - 2*x) < d.abserr);
-		}
-	}
-	{
-		auto df = backward(d, f);
-		for (double x = -1; x <= 1; x += 0.1) {
-			y = df(x);
-			assert (fabs(y - 2*x) < d.abserr);
-		}
-	}
 }
 
 #endif // _DEBUG

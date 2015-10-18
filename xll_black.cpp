@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "xll_roots.h"
+#include "xll_njr.h"
 #include "xll/xll.h"
 
 using namespace xll;
@@ -25,17 +26,18 @@ since E F = f. Note:
 *****************************************************************************/
 
 template<class F, class S, class K, class T>
-inline double black_put_value(F f, S sigma, K k, T t)
+inline auto black_put_value(F f, S sigma, K k, T t) -> decltype(f+sigma+k+t)
 {
 	ensure (f >= 0);
 	ensure (sigma >= 0);
 	ensure (k >= 0);
 	ensure (t >= 0);
 
+	// edge cases
 	if (f == 0)
 		return k;
 	if (sigma == 0 || t == 0)
-		return (std::max)(k - f, K(0) - F(0));
+		return (std::max)(k - f, K(0)-F(0));
 	if (k == 0)
 		return 0;
 
@@ -70,27 +72,52 @@ double WINAPI xll_black_put_value(double f, double sigma, double k, double t)
 	return v;
 }
 
-/*****************************************************************************
-The Black-Scholes/Merton pricing formula gives the present value of an option.
-The put value is exp(-rt)Emax{k - S, 0} 
-where S = s exp((r - sigma^/2)t + sigma B_t = exp(rt) F.
-*****************************************************************************/
-//!!! implement this using black_put_value
-inline double bms_put_value(double r, double s, double sigma, double k, double t)
-{
-	return 0;
-}
-//!!! and this
-// static AddInX xai_bms_put_value(...
-
-//!!! implement this
 template<class F, class S, class K, class T>
-inline double black_put_delta(F f, S sigma, K k, T t)
+inline auto black_put_delta(F f, S sigma, K k, T t) -> decltype(f+sigma+k+t)
 {
-	return 0;
+	ensure (f >= 0);
+	ensure (sigma >= 0);
+	ensure (k >= 0);
+	ensure (t >= 0);
+
+	// edge cases
+	if (f == 0)
+		return k;
+	if (sigma == 0 || t == 0)
+		return (std::max)(k - f, K(0)-F(0));
+	if (k == 0)
+		return 0;
+
+	auto srt = sigma*sqrt(t);
+	auto d = (log(k/f) + srt*srt/2)/srt;
+	auto d_ = d - srt;
+
+	return -N(d_);
 }
-//!!! and this
-// static AddInX xai_black_put_delta(...
+static AddInX xai_black_put_delta(
+	FunctionX(XLL_DOUBLEX, _T("?xll_black_put_delta"), _T("BLACK.PUT.DELTA"))
+	.Num(_T("f"), _T("forward"), 100)
+	.Num(_T("sigma"), _T("vol"), .2)
+	.Num(_T("k"), _T("strike"), 100)
+	.Num(_T("t"), _T("expiration"), .25)
+	.FunctionHelp(_T("Return Black put delta."))
+	.Category(_T("BSM"))
+	.Documentation()
+	);
+double WINAPI xll_black_put_delta(double f, double sigma, double k, double t)
+{
+#pragma XLLEXPORT
+	doublex v;
+
+	try {
+		v = black_put_delta(f, sigma, k, t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return v;
+}
 
 // vega is the same for put or call
 template<class F, class S, class K, class T>
@@ -131,13 +158,54 @@ double WINAPI xll_black_vega(double f, double sigma, double k, double t)
 	return v;
 }
 
-//!!!Implement Corrado-Miller formula (10) from CorMil1993.pdf
-// Use r = b = 0.
-inline double corrado_miller(double f, double k, double t)
+// Implement Corrado-Miller formula (10) from CorMil1993.pdf
+// f - forward, v - call value, k - strike, t - expiration
+// sigma0 is returned when CM formula fails
+template<class X>
+inline X corrado_miller_implied_volatility(const X& f, const X& v, const X& k, const X& t, X sigma0 = 0.2)
 {
-	return 0;
-}
+	ensure (f > 0);
+	ensure (v > 0);
+	ensure (v > f - k);
+	ensure (v <= f);
+	ensure (k > 0);
+	ensure (t > 0);
 
+	static X M_SQRT_2PI = sqrt(2*M_PI);
+
+	X s = v - (f - k)/2;
+	s *= s;
+	s -= (f - k)*(f - k)/M_PI;	
+	if (s < 0)
+		return sigma0;
+	s = sqrt(s);
+	s += v - (f - k)/2;
+	s *= M_SQRT_2PI/((f + k)*sqrt(t));
+
+	return s;
+}
+static AddInX xai_corrado_miller_implied_volatility(
+	FunctionX(XLL_DOUBLEX, _T("?xll_corrado_miller_implied_volatility"), _T("BLACK.CORRADO.MILLER.IMPLIED.VOLATILITY"))
+	.Num(_T("f"), _T("forward"), 100)
+	.Num(_T("p"), _T("call"), 3.987775)
+	.Num(_T("k"), _T("strike"), 100)
+	.Num(_T("t"), _T("expiration"), .25)
+);
+double WINAPI xll_corrado_miller_implied_volatility(double f, double p, double k, double t)
+{
+#pragma XLLEXPORT
+	doublex sigma;
+
+	try {
+		double v = p + f - k;
+		sigma = corrado_miller_implied_volatility<double>(f, v, k, t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return sigma;
+}
 // Return the volatility that gives put value p.
 inline double black_put_implied_volatility(double f, double p, double k, double t)
 {
@@ -146,22 +214,19 @@ inline double black_put_implied_volatility(double f, double p, double k, double 
 	ensure (k > 0);
 	ensure (t > 0);
 
-	gsl::root::fdfsolver s(gsl_root_fdfsolver_newton);
-	
-	auto F = [f,p,k,t](double sigma) { 
-		return -p + black_put_value(f, sigma, k, t); 
-	};
-	auto dF = [f,k,t](double sigma) { 
-		return black_vega(f, sigma, k, t); 
-	};
-	//!!!Use corrado_miller for this.
-	double sigma = 0.3;
-	s.set(F, dF, sigma);
+	double v = p + f - k;
+	double sigma = corrado_miller_implied_volatility(f, v, k, t, 0.2);
+	ensure (sigma > 0);
+	double s = sigma;
+	do {
+		std::swap(s, sigma);
+		s = sigma - (-p + black_put_value(f, sigma, k, t))/black_vega(f, sigma, k, t);
+		if (s < 0) {
+			s = sigma/2;
+		}
+	} while (fabs(s - sigma) > 1e-8);
 
-	double epsrel = 1e-6;
-	sigma = s.solve(gsl::root::test_delta(0, epsrel));
-
-	return sigma;
+	return s;
 }
 static AddInX xai_black_put_implied_volatility(
 	FunctionX(XLL_DOUBLEX, _T("?xll_black_put_implied_volatility"), _T("BLACK.PUT.IMPLIED.VOLATILTIY"))
@@ -177,6 +242,75 @@ double WINAPI xll_black_put_implied_volatility(double f, double p, double k, dou
 
 	try {
 		v = black_put_implied_volatility(f, p, k, t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return v;
+}
+/*****************************************************************************
+The Black-Scholes/Merton pricing formula gives the present value of an option.
+The put value is exp(-rt)Emax{k - S, 0} 
+where S = s exp((r - sigma^/2)t + sigma B_t = exp(rt) F.
+*****************************************************************************/
+inline double bms_put_value(double r, double s, double sigma, double k, double t)
+{
+	auto R = exp(r*t);
+	auto f = s*R;
+
+	return black_put_value(f, sigma, k, t)/R;
+}
+static AddInX xai_bms_put_value(
+	FunctionX(XLL_DOUBLEX, _T("?xll_bms_put_value"), _T("BMS.PUT.VALUE"))
+	.Num(_T("r"), _T("rate"), .01)
+	.Num(_T("s"), _T("spot"), 100)
+	.Num(_T("sigma"), _T("vol"), .2)
+	.Num(_T("k"), _T("strike"), 100)
+	.Num(_T("t"), _T("expiration"), .25)
+	.FunctionHelp(_T("Return bms put value."))
+	.Category(_T("BSM"))
+	.Documentation()
+	);
+double WINAPI xll_bms_put_value(double r, double s, double sigma, double k, double t)
+{
+#pragma XLLEXPORT
+	doublex v;
+
+	try {
+		v = bms_put_value(r, s, sigma, k, t);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return v;
+}
+
+// (d/ds) E(k - S)^+/R = (d/df)E(k -R)^+/R df/ds = dp R/R = dp
+template<class X>
+inline X bms_put_delta(X r, X s, X sigma, X k, X t)
+{
+	return black_put_delta(s*exp(r*t), sigma, k, t);
+}
+static AddInX xai_bms_put_delta(
+	FunctionX(XLL_DOUBLEX, _T("?xll_bms_put_delta"), _T("BMS.PUT.DELTA"))
+	.Num(_T("r"), _T("rate"), .01)
+	.Num(_T("s"), _T("spot"), 100)
+	.Num(_T("sigma"), _T("vol"), .2)
+	.Num(_T("k"), _T("strike"), 100)
+	.Num(_T("t"), _T("expiration"), .25)
+	.FunctionHelp(_T("Return bms put delta."))
+	.Category(_T("BSM"))
+	.Documentation()
+	);
+double WINAPI xll_bms_put_delta(double r, double s, double sigma, double k, double t)
+{
+#pragma XLLEXPORT
+	doublex v;
+
+	try {
+		v = bms_put_delta(r, s, sigma, k, t);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
