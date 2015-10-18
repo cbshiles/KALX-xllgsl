@@ -48,15 +48,6 @@ namespace deriv {
 			return result;
 		};
 	}
-	/*	inline auto forward(deriv& h, const function& f)
-	{
-		return [f,&h](double x) { return h.forward(f, x); };
-	}
-	inline auto backward(deriv& h, const function& f)
-	{
-		return [f,&h](double x) { return h.backward(f, x); };
-	}
-*/
 } // derive
 } // gsl
 
@@ -67,16 +58,17 @@ inline void test_gsl_deriv()
 {
 	double y;
 
+	auto f = [](double x) { return x*x; };
 	for (double h = 1; h > 10*std::numeric_limits<double>::epsilon(); h /= 2) {
-		auto f = gsl::deriv::central([](double x) { return x*x; }, h);
-		y = f(1);
+		auto df = gsl::deriv::central(f, h);
+		y = df(1);
 		assert (fabs(y - 2) < h);
-		auto g = gsl::deriv::forward([](double x) { return x*x; }, h);
-		y = g(1);
-//		assert (fabs(y - 2) < 10*h);
-		auto k = gsl::deriv::backward([](double x) { return x*x; }, h);
-		y = k(1);
-//		assert (fabs(y - 2) < 10*h);
+		auto df_ = gsl::deriv::forward(f, h);
+		y = df_(1);
+		assert (fabs(y - 2) < 100*h);
+		auto _df = gsl::deriv::backward(f, h);
+		y = _df(1);
+		assert (fabs(y - 2) < 10*h);
 	}
 
 }

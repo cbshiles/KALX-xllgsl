@@ -2,7 +2,9 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <cassert>
+#ifndef ensure
 #define ensure(x) assert(x)
+#endif
 #include <cmath>
 #include <vector>
 
@@ -131,8 +133,8 @@ inline void Bell(size_t m, const double* x, size_t n, double* B)
 	for (size_t k = 1; k < n; ++k) {
 		B[k] = Bell_(k, B, m, x);
 	}
+}
 
-} 
 
 // Reduced Bell polynomials b_n = B_n/n!
 // n! b_n = sum_{k=0}^{n-1} C(n-1,k) (n-1-k)! b_{n-1-k} x_k
@@ -164,7 +166,7 @@ inline void bell(size_t m, const double* x, size_t n, double* b)
 } 
 
 // Esscher transformed cumulants.
-// kappa*_n = sum_{j=0}^n kappa_{n+j} s^j/j!
+// kappa*_i = sum_{j=0}^i kappa_{i+j} s^j/j!
 inline void kappa_(double s, size_t n, const double* k, size_t n_, double* k_)
 {
 	for (size_t i = 0; i < n && i < n_; ++i) {
@@ -183,7 +185,7 @@ inline void kappa_(double s, size_t n, const double* k, size_t n_, double* k_)
 // G(x) = sum_{n>=0} (-1)^n B_n(k[0],...,k[n-1]) F^(n)(x)/n!
 inline double cdf(double x, size_t n, const double* kappa)
 {
-	double G = std_normal_ddf(0, x);
+	double G = std_normal_cdf(x);
 	std::vector<double> b{1}; // b_0 = 1
 	
 	b.reserve(30);
@@ -224,7 +226,8 @@ inline X put_value(X f, X sigma, X k, X t, size_t n = 0, X *kappa = nullptr)
 	kappa_.resize(2*n);
 	njr::kappa_(s, n, &kappa_[0], 2*n, &kappa_[0]);
 	kappa_[1] -= 1; 
-	X P_ = cdf(z, n, &kappa_[0]);
+
+	X P_ = cdf(z, 2*n, &kappa_[0]);
 
 	return k*P - f*P_;
 }
@@ -270,12 +273,41 @@ inline void test_njr_hermite(size_t N = 10000, size_t O = 10)
 
 inline void test_njr_bell()
 {
-	std::vector<double> B(6), x = {1,1,1,1,1,1};
-	njr::Bell(x.size(), x.data(), B.size(), &B[0]);
-	// http://www.wolframalpha.com/input/?i=Table%5BBellB%5Bn%5D%2C+%7Bn%2C0%2C5%7D%5D
-	double BellB[] = {1, 1, 2, 5, 15, 52};
-	for (size_t i = 0; i < sizeof(BellB)/sizeof(*BellB); ++i)
-		ensure (B[i] == BellB[i]);
+	std::default_random_engine e;
+	std::uniform_real_distribution<> u;
+
+	{
+		std::vector<double> B(6), x = {1,1,1,1,1,1};
+		njr::Bell(x.size(), x.data(), B.size(), &B[0]);
+		// http://www.wolframalpha.com/input/?i=Table%5BBellB%5Bn%5D%2C+%7Bn%2C0%2C5%7D%5D
+		double BellB[] = {1, 1, 2, 5, 15, 52};
+		for (size_t i = 0; i < sizeof(BellB)/sizeof(*BellB); ++i) {
+			ensure (B[i] == BellB[i]);
+		}
+	}
+
+	{
+		size_t n = 1;
+		std::vector<double> x(n);
+		for (size_t i = 0; i < n; ++i) {
+			x[i] = 1/u(e) - 1/u(e);
+		}
+
+		size_t m = 4;
+		std::vector<double> B(m);
+		njr::Bell(x.size(), x.data(), B.size(), &B[0]);
+		std::vector<double> b(m);
+		njr::bell(x.size(), x.data(), b.size(), &b[0]);
+		// test B_0 = 1 and b_0 = B_0/0!
+		ensure (B[0] == 1);
+		ensure (b[0] == B[0]/1);
+		// test B_1(x1) = x1 and b_1 = B_1/1!
+		ensure (B[1] == x[0]);	
+		ensure (b[0] == B[0]/1);
+		//!!! test B_2(x1,x2) = x1*x1 + x2 and b_2 = B_2/2!
+		//!!! test B_3(x1,x2,x3) = ??? and b_3 = B_3/3!
+	}
+
 }
 
 #endif // _DEBUG

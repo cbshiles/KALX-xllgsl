@@ -139,12 +139,6 @@ double WINAPI xll_rng_min(HANDLEX rng)
 	return x;
 }
 
-//!!!set
-//!!!get
-//!!!uniform
-//!!!uniform_pos
-//!!!uniform_int
-
 #ifdef _DEBUG
 XLL_TEST_BEGIN(xll_rng_test)
 

@@ -207,7 +207,7 @@ double WINAPI xll_corrado_miller_implied_volatility(double f, double p, double k
 	return sigma;
 }
 // Return the volatility that gives put value p.
-inline double black_put_implied_volatility(double f, double p, double k, double t)
+inline double black_put_implied_volatility(double f, double p, double k, double t, double precision = 1e-8)
 {
 	ensure (f >= 0);
 	ensure (p >= k - f && p >= 0);
@@ -224,7 +224,7 @@ inline double black_put_implied_volatility(double f, double p, double k, double 
 		if (s < 0) {
 			s = sigma/2;
 		}
-	} while (fabs(s - sigma) > 1e-8);
+	} while (fabs(s - sigma) > precision);
 
 	return s;
 }
@@ -320,15 +320,23 @@ double WINAPI xll_bms_put_delta(double r, double s, double sigma, double k, doub
 }
 
 #ifdef _DEBUG
+#include "xll_deriv.h"
 XLL_TEST_BEGIN(xll_black_test)
 
 double eps = std::numeric_limits<double>::epsilon();
 
 ensure (fabs (black_put_value(100,.2,100,.25) - 3.9877611676744920) <= eps);
+//!!!test black_put_delta using gsl::deriv::central in xll_deriv.h, e.g., use
+// auto delta = gsl::deriv::central([](double f) { return black_put_value(f,.2,100,.25); });
+// and compare with black_put_delta
+
 ensure (fabs (black_vega(100,.2,100,.25) - 19.922195704738204) <= eps);
 ensure (fabs (black_put_implied_volatility(100,3.9877611676744920,100,.25) - 0.2) <= eps);
+//!!! test bms_put_value
 
-//!!!  add tests that verify Corrado and Miller's claim:
+//!!! test bms_put_delta using gsl::deriv::central xll_deriv.h
+
+
 /*
 In graphical analyses not reported here, we found that with option maturities of 3 months or more, 
 the improved quadratic formula in Eq. (10) provides near perfect accuracy for stock prices within 
