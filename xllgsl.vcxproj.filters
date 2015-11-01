@@ -191,6 +191,9 @@
     <ClCompile Include="randist\xll_ran_weibull.cpp">
       <Filter>Source Files\randist</Filter>
     </ClCompile>
+    <ClCompile Include="xll_nsr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -877,10 +880,18 @@
     <ClInclude Include="xll_njr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="xll_black.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_nsr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
     <None Include="SOLVEkey.pdf" />
-    <None Include="CorMil1993.pdf" />
+    <None Include="CorMil1993.pdf">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

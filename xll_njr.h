@@ -287,7 +287,7 @@ inline void test_njr_bell()
 	}
 
 	{
-		size_t n = 1;
+		size_t n = 4;
 		std::vector<double> x(n);
 		for (size_t i = 0; i < n; ++i) {
 			x[i] = 1/u(e) - 1/u(e);
@@ -305,7 +305,12 @@ inline void test_njr_bell()
 		ensure (B[1] == x[0]);	
 		ensure (b[0] == B[0]/1);
 		//!!! test B_2(x1,x2) = x1*x1 + x2 and b_2 = B_2/2!
+		ensure (B[2] = x[0]*x[0] + x[1]);
+		ensure (b[2] = (x[0]*x[0] + x[1])/2);
 		//!!! test B_3(x1,x2,x3) = ??? and b_3 = B_3/3!
+		// B_3 = 1B_2 x1 + 2B_1 x2 + B_0 x3
+		//     = x1^3 + x1 x2 + 2x1 x2 + x3
+		//     = x1^3 + 3 x1 x2 + x3
 	}
 
 }

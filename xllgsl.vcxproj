@@ -74,6 +74,7 @@
     <ClCompile Include="xll_gsl.cpp" />
     <ClCompile Include="xll_multimin.cpp" />
     <ClCompile Include="xll_njr.cpp" />
+    <ClCompile Include="xll_nsr.cpp" />
     <ClCompile Include="xll_poly.cpp" />
     <ClCompile Include="xll_rng.cpp" />
     <ClCompile Include="xll_roots.cpp" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="randist\xll_ran_discrete.h" />
+    <ClInclude Include="xll_black.h" />
     <ClInclude Include="xll_deriv.h" />
     <ClInclude Include="xll_gsl.h" />
     <ClInclude Include="include\gsl\gsl_blas.h" />
@@ -310,6 +312,7 @@
     <ClInclude Include="xll_math.h" />
     <ClInclude Include="xll_multimin.h" />
     <ClInclude Include="xll_njr.h" />
+    <ClInclude Include="xll_nsr.h" />
     <ClInclude Include="xll_randist.h" />
     <ClInclude Include="xll_rng.h" />
     <ClInclude Include="xll_roots.h" />
