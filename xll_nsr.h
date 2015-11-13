@@ -8,7 +8,7 @@
 // Brownian motion. The stochastic discount is $D_t = \exp(-\int_0^t f_s ds)$.
 // 
 // The discount to time $t$ is $D(t) = E D_t$. Using $E e^N = \exp(E N + 1/2 \Var N)$
-// we need to compute $E\log D(t) = -\int_0^t\phi(s)\,ds$ and $\Var\log D(t)$.
+// we need to compute $E\log D_t = -\int_0^t\phi(s)\,ds$ and $\Var\log D_t$.
 // Since $\Cov(B_u,B_v) = \min\{u,v\}$,
 // \begin{align*}
 // Var(\int_0^t B_s ds) &= Cov(\int_0^t B_s ds,\int_0^t B_s ds) \\
@@ -165,7 +165,7 @@ inline void test_nsr()
 
 	double ftu = (D(t)/D(u) - 1)/(u - t);
 	double k = 0.04;
-	v = (std::max)(ftu - k, 0.)*D(t);
+	v = (u - t)*(std::max)(ftu - k, 0.)*D(u);
 	sigma = 0;
 	v_ = nsr::caplet_value(D(t), D(u), sigma, k, t, u);
 	dv = v - v_;
