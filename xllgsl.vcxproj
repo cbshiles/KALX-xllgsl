@@ -86,9 +86,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="xll_vector.cpp" />
+    <ClCompile Include="xll_vswap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="randist\xll_ran_discrete.h" />
+    <ClInclude Include="xll_vswap.h" />
     <ClInclude Include="xll_black.h" />
     <ClInclude Include="xll_deriv.h" />
     <ClInclude Include="xll_gsl.h" />

@@ -194,6 +194,9 @@
     <ClCompile Include="xll_nsr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xll_vswap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -884,6 +887,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_nsr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_vswap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
