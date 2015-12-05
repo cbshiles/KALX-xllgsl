@@ -1,5 +1,7 @@
 // xll_vswap.h - variance swap pricing
 #pragma once
+#include <algorithm>
+#include <numeric>
 
 namespace gsl {
 
@@ -13,7 +15,11 @@ namespace gsl {
 	template<class X>
 	inline void pwfit(size_t n, const X* x, const X* y, X* z)
 	{
-		//!!! implement
+		// first derivative
+		for (size_t i = 1; i < n; ++i )
+			z[i] = (y[i] - y[i-1])/(x[i] - x[i-1]);
+		// second derivative
+		std::adjacent_difference(z + 1, z + n, z);
 	}
 
 	// If p is the array of put/call values, return the cost of
@@ -22,7 +28,14 @@ namespace gsl {
 	inline X cost(size_t n, const X* x, const X* y, const X* p)
 	{
 		//!!! implement sum_i=1^i=n-2 z[i]*p[i]
-		return 0;
+		std::vector<X> z(n);
+		pwfit(n, x, y, &z[0]);
+
+		X c = 0;
+		for (size_t i = 1; i < n - 1; ++i)
+			c += z[i]*p[i];
+
+		return c;
 	}
 
 	// The cost of setting up a piecewise linear continuous approximation
@@ -32,7 +45,7 @@ namespace gsl {
 	//        + sum_{k_j > z} f''(k_j) (x - k_j)^+
 	// The present value of the payoff is
 	// D Ef_(X) = D f(z) + D f'(z) (phi - z) + sum f''(k_i) p_i + sum f''(k_j) c_j,
-	// where D is the discount, phi is the furtures quote, and p_i, c_j are put
+	// where D is the discount, phi is the futures quote, and p_i, c_j are put
 	// and call prices at the corresponding strikes.
 	// Use payoff function f(x) = -2 log(x/x0) + 2(x - x0)/z to compute the
 	// cost of setting up the static hedge for a variance swap.
@@ -42,6 +55,7 @@ namespace gsl {
 		size_t ncall, const X* kcall, const X* call) // call strikes and prices
 	{
 		// assume kput is increasing and find largest n with kput[n] < z
+		// lower_bound, upper_bound
 		X put_cost = 0; // use the cost function above
 
 		// assume kcall is increasing and find smallest n with kcall[n] > z
