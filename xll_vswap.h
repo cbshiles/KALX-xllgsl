@@ -50,18 +50,35 @@ namespace gsl {
 	// Use payoff function f(x) = -2 log(x/x0) + 2(x - x0)/z to compute the
 	// cost of setting up the static hedge for a variance swap.
 	template<class X>
-	inline X cost(const X& D, const X& x0, const X& phi, const X& z,
+	inline X vswap(const X& D, const X& x0, const X& phi, const X& z,
 		size_t nput, const X* kput, const  X* put, // put strikes and prices
 		size_t ncall, const X* kcall, const X* call) // call strikes and prices
 	{
-		// assume kput is increasing and find largest n with kput[n] < z
+		// assume kput is increasing and find largest n with kput[n] < phi
 		// lower_bound, upper_bound
-		X put_cost = 0; // use the cost function above
+		size_t n;
+		for (n = 0; n < nput; ++n)
+			if (kput[n] >= phi)
+				break;
+		
+		std::vector<X> f(n);
+		for (size_t i = 0; i < n; ++i)
+			f[i] = -2*log(kput[i]/x0) + 2*(kput[i] - x0)/z;
+
+		X put_cost = cost(n, kput, &f[0], put); // use the cost function above
 
 		// assume kcall is increasing and find smallest n with kcall[n] > z
-		X call_cost = 0; // ditto
+		for (n = 0; n < ncall; ++n)
+			if (kcall[n] > phi)
+				break;
 
-		return 0; // cash + forward + put cost + call cost
+		f.resize(ncall - n);
+		for (size_t i = n; i < kcall[i]; ++i)
+			f[i-n] = -2*log(kcall[i]/x0) + 2*(kcall[i] - x0)/z;
+
+		X call_cost = cost(ncall - n, kcall + n, &f[0], call + n); // ditto
+
+		return D*(-2*log(z/x0) + 2*(z - x0)/z + 0) + put_cost + call_cost;
 	}
 
 } // namespace gsl
