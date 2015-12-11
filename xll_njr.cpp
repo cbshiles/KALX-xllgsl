@@ -1,6 +1,6 @@
 // xll_njr.cpp - normal Jarrow-Rudd
+#include "xll/xll.h"
 #include "xll_njr.h"
-#include "../xll8/xll/xll.h"
 
 using namespace xll;
 

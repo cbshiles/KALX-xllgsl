@@ -1,4 +1,5 @@
 // xll_nsr.cpp - Normal short rate model.
+#pragma warning(disable: 702)
 #include <functional>
 #include "xll_nsr.h"
 #include "xll_gsl.h"

@@ -1,7 +1,8 @@
 // xll_black.cpp - Black forward model
+#pragma warning(disable: 702)
+//#include "xll_njr.h"
 #include "xll_roots.h"
 #include "xll_black.h"
-//#include "xll_njr.h"
 #include "xll/xll.h"
 
 using namespace xll;
@@ -190,8 +191,14 @@ ensure (fabs (black_vega(100,.2,100,.25) - 19.922195704738204) <= eps);
 ensure (fabs (black_put_implied_volatility(100,3.9877611676744920,100,.25) - 0.2) <= eps);
 
 //!!! test bms_put_value
+// should agree if r = 0
+ensure (fabs (black_put_value(100,.2,100,.25) - bms_put_value(0,100,.2,100,.25)) <= eps);
 
 //!!! test bms_put_delta using gsl::deriv::central xll_deriv.h
+double r = 0.1, s = 100, sigma = 0.2, k = 100, t = 0.25;
+double put_delta2 = bms_put_delta(r, s, sigma, k, t);
+auto delta2 = gsl::deriv::central([r,sigma,k,t](double s) { return bms_put_value(r,s,sigma,k,t); });
+ensure (fabs(put_delta2 - delta2(s)) <= 1e-6);
 
 
 /*
@@ -200,7 +207,7 @@ the improved quadratic formula in Eq. (10) provides near perfect accuracy for st
 + 10 percent of a discounted strike price. With shorter maturities, say, 1 month, the range of 
 precision is reduced to about + 5 percent of a discounted strike price.
 */
-// ensure(...
+// see
 
 XLL_TEST_END(xll_black_test)
 #endif 

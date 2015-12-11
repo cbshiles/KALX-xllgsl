@@ -1,5 +1,5 @@
 // xll_ran_gaussian.cpp - Gaussian variates, density, cumulative distribution, and inverse
-// http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html#The-Gaussian-Distribution
+// http://www.gnu.org/software/gsl/manual/html_node/The-Bernoulli-Distribution.html#The-Bernoulli-Distribution
 #include "../xll_rng.h"
 #include "../xll_randist.h"
 //#define EXCEL12
@@ -10,11 +10,11 @@ using namespace xll;
 static AddInX xai_ran_bernoulli(
 	FunctionX(XLL_DOUBLEX, _T("?xll_ran_bernoulli"), _T("GSL.RAN.BERNOULLI"))
 	.Arg(XLL_HANDLEX, _T("rng"), _T("is a handle returned by GSL.RNG."))
-	.Arg(XLL_DOUBLEX, _T("p"), _T("is the standard deviation of the Gaussian. Default is 1"), 1.0)
+	.Arg(XLL_DOUBLEX, _T("p"), _T("is the probability of returning 1. Default is 1"), 1.0)
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Bernoulli random deviates using a random number generator."))
 	.Documentation(_T(""))
-	);
+);
 double WINAPI xll_ran_bernoulli(HANDLEX rng, double p)
 {
 #pragma XLLEXPORT
@@ -37,13 +37,13 @@ double WINAPI xll_ran_bernoulli(HANDLEX rng, double p)
 
 static AddInX xai_ran_bernoulli_pdf(
 	FunctionX(XLL_DOUBLEX, _T("?xll_ran_bernoulli_pdf"), _T("GSL.DIST.BERNOULLI.PDF"))
-	.Arg(XLL_HANDLEX, _T("k"), _T("is the blah blah"))
-	.Arg(XLL_DOUBLEX, _T("p"), _T("is the blah blah. Default is 1."), 1.0)
+	.Arg(XLL_USHORTX, _T("k"), _T("is the outcome of the Bernoulli trial."))
+	.Arg(XLL_DOUBLEX, _T("p"), _T("is the probability of returning 1."))
 	.Category(_T("GSL"))
-	.FunctionHelp(_T("Return Bernoulli probability density function."))
+	.FunctionHelp(_T("This function computes the probability p(k) of obtaining k from a Bernoulli distribution with probability parameter p."))
 	.Documentation(_T(""))
-	);
-double WINAPI xll_ran_bernoulli_pdf(double k, double p)
+);
+double WINAPI xll_ran_bernoulli_pdf(USHORT k, double p)
 {
 #pragma XLLEXPORT
 
@@ -52,17 +52,16 @@ double WINAPI xll_ran_bernoulli_pdf(double k, double p)
 
 static AddInX xai_cdf_bernoulli_P(
 	FunctionX(XLL_DOUBLEX, _T("?xll_cdf_bernoulli_P"), _T("GSL.DIST.BERNOULLI.CDF"))
-	.Arg(XLL_HANDLEX, _T("k"), _T("is BLAH BLAH."))
+	.Arg(XLL_USHORTX, _T("k"), _T("is BLAH BLAH."))
 	.Arg(XLL_DOUBLEX, _T("p"), _T("blah blah. Default is 1"), 1.0)
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Bernoulli cumulative distribution function."))
 	.Documentation(_T(""))
-	);
-double WINAPI xll_cdf_bernoulli_P(double k, double p)
+);
+double WINAPI xll_cdf_bernoulli_P(USHORT k, double p)
 {
 #pragma XLLEXPORT
 	
-
 	if (k < 0)
 		return 0;
 	else if (k >= 0 && k < 1)
@@ -73,8 +72,8 @@ double WINAPI xll_cdf_bernoulli_P(double k, double p)
 
 static AddInX xai_cdf_bernoulli_Pinv(
 	FunctionX(XLL_DOUBLEX, _T("?xll_cdf_bernoulli_Pinv"), _T("GSL.DIST.BERNOULLI.INV"))
-	.Arg(XLL_HANDLEX, _T("u"), _T("blah blah."))
-	.Arg(XLL_DOUBLEX, _T("k"), _T("blah blah"), 1.0)
+	.Arg(XLL_DOUBLEX, _T("u"), _T("blah blah."))
+	.Arg(XLL_DOUBLEX, _T("p"), _T("blah blah"), 1.0)
 	.Category(_T("GSL"))
 	.FunctionHelp(_T("Return Bernoulli inverse cumulative distribution function."))
 	.Documentation(_T(""))

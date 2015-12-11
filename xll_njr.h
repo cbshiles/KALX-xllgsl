@@ -8,6 +8,13 @@
 #include <cmath>
 #include <vector>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif // M_PI
+#ifndef M_SQRT2
+#define M_SQRT2 1.41421356237309504880
+#endif // M_SQRT2
+
 namespace njr {
 
 // H_{n+1}(x) = x H_n(x) - n H_{n-1}(x)

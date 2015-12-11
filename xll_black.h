@@ -121,15 +121,16 @@ inline X corrado_miller_implied_volatility(const X& f, const X& v, const X& k, c
 }
 
 // Return the volatility that gives put value p.
-inline double black_put_implied_volatility(double f, double p, double k, double t, double precision = 1e-8)
+inline double black_put_implied_volatility(double f, double p, double k, double t,
+	double eps = 1e-8, double sigma = 0.2, size_t n = 100)
 {
 	ensure (f >= 0);
 	ensure (p >= k - f && p >= 0);
 	ensure (k > 0);
 	ensure (t > 0);
 
-	double v = p + f - k;
-	double sigma = corrado_miller_implied_volatility(f, v, k, t, 0.2);
+//	double v = p + f - k;
+//	double sigma = corrado_miller_implied_volatility(f, v, k, t, 0.2);
 	ensure (sigma > 0);
 	double s = sigma;
 	do {
@@ -138,7 +139,7 @@ inline double black_put_implied_volatility(double f, double p, double k, double 
 		if (s < 0) {
 			s = sigma/2;
 		}
-	} while (fabs(s - sigma) > precision);
+	} while (n-- && fabs(s - sigma) > eps);
 
 	return s;
 }

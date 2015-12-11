@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="expm1.cpp" />
     <ClCompile Include="randist\xll_ran_bernoulli.cpp" />
     <ClCompile Include="randist\xll_ran_beta.cpp" />
     <ClCompile Include="randist\xll_ran_binomial.cpp" />
