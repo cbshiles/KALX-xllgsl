@@ -902,5 +902,6 @@
     <None Include="CorMil1993.pdf">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="nsr.pdf" />
   </ItemGroup>
 </Project>

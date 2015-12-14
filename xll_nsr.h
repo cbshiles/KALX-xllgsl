@@ -8,7 +8,7 @@
 // Brownian motion. The stochastic discount is $D_t = \exp(-\int_0^t f_s ds)$.
 // 
 // The discount to time $t$ is $D(t) = E D_t$. Using $E e^N = \exp(E N + 1/2 \Var N)$
-// we need to compute $E\log D_t = -\int_0^t\phi(s)\,ds$ and $\Var\log D_t$.
+// we need to compute $E\log D(t) = -\int_0^t\phi(s)\,ds$ and $\Var\log D(t)$.
 // Since $\Cov(B_u,B_v) = \min\{u,v\}$,
 // \begin{align*}
 // Var(\int_0^t B_s ds) &= Cov(\int_0^t B_s ds,\int_0^t B_s ds) \\
@@ -85,12 +85,12 @@ namespace nsr {
 	// expected value of log D_t(u) using the forward Fuv = F_0(u,v).
 	inline double E_logD(double Ftu, double sigma, double t, double u)
 	{
-		return 0; //!!!write in term the forward Fuv = (D(t)/D(u) - 1)/(u - t).
+		return -log(Ftu*(u-t)+1) - sigma*sigma*u*t*(u - t) / 2; //!!!write in term the forward Ftu = (D(t)/D(u) - 1)/(u - t).
 	}
 	// variance of log D_t(u)
 	inline double Var_logD(double sigma, double t, double u)
 	{
-		return 0; //!!! replace by Var log D_t(u)
+		return sigma*sigma*(u-t)*(u-t)*t; //!!! replace by Var log D_t(u)
 	}
 }
 
@@ -117,7 +117,7 @@ namespace nsr {
 	// covariance of log D_t(u) and D_t
 	inline double Cov_logD_D(double sigma, double t, double u)
 	{
-		return 0; //!!! replace by Cov(log D_t(u), log D_t)
+		return sigma*sigma*(u-t)*u*u/2; //!!! replace by Cov(log D_t(u), log D_t)
 	}
 
 	// value of caplet over [u,v] with strike k
@@ -126,8 +126,9 @@ namespace nsr {
 		//!!! Determine appropriate values for f and s using 
 		// E_LogD, Var_logD, and Cov_logD_D.
 		// Recall E exp(N) = exp(E[N] + Var(N)/2) if N is normal.
-		double f = 0; // f = EF = E(1 + (v-u) k)D_u(v) e^gamma
-		double s = 0; // s^2 t = Var log F = Var log D_u(v)
+		// f = EF = E(1 + (v-u) k)D_u(v) e^gamma
+		double f = (1 + (v - u)*k)*exp(E_logD(Du, Dv, sigma, u, v) + 0.5*Var_logD(sigma, u, v))*exp(Cov_logD_D(sigma, u, v));
+		double s = Var_logD(sigma, u, v) / u; // s^2 t = Var log F = Var log D_u(v)
 		k = 1;
 		double t = u;
 
@@ -153,24 +154,40 @@ inline void test_nsr()
 	dv = v - v_;
 	assert (fabs(dv) <= eps);
 	// !!! test Var_logD
+	v = sigma*sigma*dt*dt*t;
+	v_ = nsr::Var_logD(sigma, t, u);
+	dv = v - v_;
+	assert(fabs(dv) <= eps);
 	// !!! test Cov_logD_D
+	v = sigma*sigma*dt*t*t / 2;;
+	v_ = nsr::Cov_logD_D(sigma, t, u);
+	dv = v - v_;
+	assert(fabs(dv) <= eps);
 
 	sigma = 0.05;
-	v = -f*dt - sigma*sigma*dt*dt*dt/6;
+	v = log(D(u) / D(t)) - sigma*sigma*u*t*(u - t) / 2;
 	v_ = nsr::E_logD(D(t), D(u), sigma, t, u);
 	dv = v - v_;
-//	assert (fabs(dv) <= eps);
+	assert (fabs(dv) <= eps);
 	// !!! test Var_logD
+	v = sigma*sigma*dt*dt*t;
+	v_ = nsr::Var_logD(sigma, t, u);
+	dv = v - v_;
+	assert(fabs(dv) <= eps);
 	// !!! test Cov_logD_D
+	v = sigma*sigma*dt*u*u / 2;;
+	v_ = nsr::Cov_logD_D(sigma, t, u);
+	dv = v - v_;
+	assert(fabs(dv) <= eps);
 
 	double ftu = (D(t)/D(u) - 1)/(u - t);
 	double k = 0.04;
-	v = (u - t)*(std::max)(ftu - k, 0.)*D(u);
+	v = (std::max)(ftu - k, 0.)*D(t);
 	sigma = 0;
 	v_ = nsr::caplet_value(D(t), D(u), sigma, k, t, u);
 	dv = v - v_;
 	// !!! test caplet_value equals intrinsic
-//	assert (fabs(dv) <= eps);
+    assert (fabs(dv) <= 1e-3); //not very accurate
 }
 
 #endif // _DEBUG

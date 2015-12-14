@@ -324,6 +324,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CorMil1993.pdf" />
+    <None Include="nsr.pdf" />
     <None Include="README.md" />
     <None Include="SOLVEkey.pdf" />
   </ItemGroup>
