@@ -67,6 +67,7 @@
     <ClCompile Include="specfun\xll_sf_zeta.cpp" />
     <ClCompile Include="specfun\xll_sf_airy.cpp" />
     <ClCompile Include="specfun\xll_sf_bessel.cpp" />
+    <ClCompile Include="xll_bachelier.cpp" />
     <ClCompile Include="xll_black.cpp" />
     <ClCompile Include="xll_deriv.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -91,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="randist\xll_ran_discrete.h" />
+    <ClInclude Include="xll_bachelier.h" />
     <ClInclude Include="xll_vswap.h" />
     <ClInclude Include="xll_black.h" />
     <ClInclude Include="xll_deriv.h" />

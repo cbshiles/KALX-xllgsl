@@ -200,6 +200,9 @@
     <ClCompile Include="expm1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xll_bachelier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gsl\gsl_blas.h">
@@ -893,6 +896,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll_vswap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_bachelier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
