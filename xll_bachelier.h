@@ -1,5 +1,7 @@
 // xll_bachelier.h - Bachelier model
 #pragma once
+#include "gsl/gsl_randist.h"
+#include "gsl/gsl_cdf.h"
 
 // The Bachelier model for a stock is F_t = f + sigma B_t, where B_t is Brownian motion.
 // The price of a put option with strike k expiring at t is
@@ -9,7 +11,7 @@
 // where N is the standard normal cumulative distribution, n = N' is the density,
 // and d = (f - k)/(sigma sqrt(t)).
 
-// Implement the function
+// Implement using gsl_ran_gaussian_pdf and gsl_cdf_gaussian_P.
 double bachelier_put(double f, double sigma, double k, double t)
 {
 	return 0;
