@@ -18,7 +18,7 @@ double bachelier_put(double f, double sigma, double k, double t)
 }
 
 // Implement a test to show P = sigma sqrt(t)/(sqrt(2 pi)) for 
-// sigma = 0.1, 0.2, and t = 0.5, 1.
+// the four cases sigma = 0.1, 0.2 and t = 0.5, 1.
 inline void test_bachelier_put()
 {
 }
